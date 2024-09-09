@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import NavBar from "./Navbar";
-// import { useAuth } from './context/AuthContext'
+import { useAuth } from "./UserContext";
 
 export default function Header() {
-  // const { selectedCommunity, user } = useAuth()
+  const { user } = useAuth()
 
   return (
     <header className="w-[100%] box-sizing p-4 bg-white shadow-lg">
@@ -23,12 +23,15 @@ export default function Header() {
           />
         </Link>
         <div className="flex gap-2 md:gap-4 items-center">
-          <Link
-            className="w-8 h-8 bg-pink-500 p-2 border-4 border-black rounded-full flex items-center justify-center hover:opacity-50 transition-all duration-500"
-            href="/user/profile"
-          >
-            <p className="font-black">O</p>
-          </Link>
+          {user ?
+            <Link
+              className="w-8 h-8 bg-pink-500 p-2 border-4 border-black rounded-full flex items-center justify-center hover:opacity-50 transition-all duration-500"
+              href="/user/profile"
+            >
+              <p className="font-black">O</p>
+            </Link>
+          : null
+          }
           <NavBar />
         </div>
       </section>

@@ -2,43 +2,45 @@
 
 import Link from "next/link"
 import { useState } from "react"
-// import { useAuth } from "./context/AuthContext";
-import { MdEvent } from "react-icons/md";
-import { usePathname } from "next/navigation";
+import { MdEvent, MdLogin } from "react-icons/md";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-// import { LogUserOut } from "@/utils/logOut";
+import { LogUserOut } from "@/utils/logUserOut";
+import { useAuth } from "./UserContext";
 
 
 
 
 export default function NavBar() {
   const [navOpen, setNavOpen] = useState<boolean>(false);
-  // const { user, setToken, setUser, setCommunities, selectedCommunity, setSelectedCommunity, setUserMemberships, setUserAdmins, setUserPostLikes } = useAuth();
+  const { setToken, setUser, user } = useAuth();
   const pathname = usePathname()
-  // const router = useRouter()
+  const router = useRouter()
   function handleMenuOpen():void {
     setNavOpen(!navOpen) 
   }
 
-  // function handleLogOut():void {
-  //   LogUserOut({setToken,
-  //     setUser,
-  //     setCommunities,
-  //     setSelectedCommunity,
-  //     setUserMemberships,
-  //     setUserAdmins,
-  //     setUserPostLikes})
-  //   router.push('/login')
-  // }
+  function handleLogOut():void {
+    LogUserOut({setToken,
+      setUser
+      })
+    router.push('/user/login')
+  }
   
   return(
     <nav className="z-20 flex gap-4">
       <>
       <section className="flex gap-8 justify-end">
-        <Link href="/events" className={`${pathname.includes('/communities') ? 'text-indigo-500' : 'text-auto'} flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}>
+        <Link href="/events" className={`${pathname.includes('/events') ? 'text-pink-500' : 'text-auto'} flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}>
           <MdEvent size={25} aria-label="View active communities"/>
           <li className="list-style-none hidden sm:block font-bold text-xs md:text-lg flex gap-4 justify-start items-center cursor-pointer">
             Events
+          </li>
+        </Link>
+        <Link href="/user/login" className={`${pathname.includes('/login') ? 'text-pink-500' : 'text-auto'} flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}>
+          <MdLogin size={25} aria-label="View active communities"/>
+          <li className="list-style-none hidden sm:block font-bold text-xs md:text-lg flex gap-4 justify-start items-center cursor-pointer">
+            Login/Register
           </li>
         </Link>
       </section>
@@ -70,25 +72,33 @@ export default function NavBar() {
         <ul className="text-left">
           <p className="text-xs uppercase font-light mt-8 text-gray-500">Explore</p>
           <Link href="/events">
-            <li onClick={handleMenuOpen} className={`${pathname.includes('/events') ? 'text-indigo-500' : 'text-auto'} list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}>
+            <li onClick={handleMenuOpen} className={`${pathname.includes('/events') ? 'text-pink-500' : 'text-auto'} list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}>
               Events
+            </li>
+          </Link>
+          <Link href="/about">
+            <li onClick={handleMenuOpen} className={`${pathname.includes('/about') ? 'text-pink-500' : 'text-auto'} list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}>
+              About
             </li>
           </Link>
 
           <>
+          {user ? 
+          <>
           <p className="text-xs uppercase font-light mt-8 text-gray-500">Your stuff</p>
           <Link href="/user/profile">
-            <li onClick={handleMenuOpen} className={`${pathname.includes('/profile') ? 'text-indigo-500' : 'text-auto'} list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}>
+            <li onClick={handleMenuOpen} className={`${pathname.includes('/profile') ? 'text-pink-500' : 'text-auto'} list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}>
               Profile
             </li>
           </Link>
           <Link href="/basket">
-            <li onClick={handleMenuOpen} className={`${pathname.includes('/basket') ? 'text-indigo-500' : 'text-auto'} list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}>
+            <li onClick={handleMenuOpen} className={`${pathname.includes('/basket') ? 'text-pink-500' : 'text-auto'} list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}>
               Basket
             </li>
           </Link>
-          
-          <li  className="list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all">
+          </>
+          : null }
+          <li onClick={handleLogOut} className="list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all">
               Logout
           </li>
           </>
