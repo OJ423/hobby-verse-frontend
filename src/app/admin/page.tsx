@@ -1,9 +1,10 @@
 import Layout from "@/components/Layout";
 
-export default function Home() {
+export default function Admin() {
   return (
     <>
-      <Layout>
+      <Layout >
+        <p>This is the admin page</p>
         <p>Welcome to the Hobby Verse</p>
       </Layout>
     </>
