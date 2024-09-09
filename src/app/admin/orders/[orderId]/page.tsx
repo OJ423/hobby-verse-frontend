@@ -1,10 +1,11 @@
 import Layout from "@/components/Layout";
 
-export default function Home() {
+export default function AdminOrder() {
   return (
     <>
-      <Layout>
+      <Layout >
         <p>Welcome to the Hobby Verse</p>
+        <p>This is the admin order page</p>
       </Layout>
     </>
   );
