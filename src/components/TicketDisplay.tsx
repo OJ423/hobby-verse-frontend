@@ -1,4 +1,4 @@
-import { EventTickets } from "@/utils/customTypes";
+import { Event, EventTickets } from "@/utils/customTypes";
 import { getEventTickets } from "@/utils/ticketApiCalls";
 import { useEffect, useState } from "react";
 import IsLoading from "./IsLoading";
@@ -9,9 +9,10 @@ import { IoTicketOutline } from "react-icons/io5";
 interface EventTicketProps {
   eventId: string;
   eventName: string;
+  event: Event;
 }
 
-const TicketDisplay: React.FC<EventTicketProps> = ({ eventId, eventName }) => {
+const TicketDisplay: React.FC<EventTicketProps> = ({ eventId, eventName, event }) => {
   const [eventTickets, setEventTickets] = useState<EventTickets[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
@@ -40,7 +41,7 @@ const TicketDisplay: React.FC<EventTicketProps> = ({ eventId, eventName }) => {
 
           </div>
             {eventTickets.map((ticket) => (
-              <TicketCard key={ticket.id} ticket={ticket} />
+              <TicketCard key={ticket.id} ticket={ticket} event={event} />
             ))}
         </section>
       ) : <p className="my-20">{`We're sorry but this appears to be sold out.`}</p>}

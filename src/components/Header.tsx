@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import NavBar from "./Navbar";
 import { useAuth } from "./UserContext";
+import { FaShoppingBasket } from "react-icons/fa";
+
 
 export default function Header() {
-  const { user } = useAuth()
+  const { user, basket } = useAuth()
 
   return (
     <header className="w-[100%] box-sizing p-4 bg-white shadow-lg">
@@ -32,6 +34,12 @@ export default function Header() {
             </Link>
           : null
           }
+          {basket ? 
+          <Link href="/basket">
+            <FaShoppingBasket size={24}/>
+          </Link>
+          : null  
+        }
           <NavBar />
         </div>
       </section>

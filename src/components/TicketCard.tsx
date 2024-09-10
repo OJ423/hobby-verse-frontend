@@ -1,24 +1,16 @@
-import { EventTickets } from "@/utils/customTypes";
-import { useState } from "react";
+"use client"
+
+import { Basket, Event, EventTickets } from "@/utils/customTypes";
+import { useEffect, useState } from "react";
+import { useAuth } from "./UserContext";
+import BasketChange from "./BasketChange";
 
 interface TicketCardProps {
   ticket: EventTickets;
+  event: Event;
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
-  const [ticketQty, setTicketQty] = useState<number>(0);
-  
-  const addToOrder = () => {
-    setTicketQty((prevQty) => prevQty + 1);
-  };
-
-  const removeFromOrder = () => {
-    if (ticketQty === 0) {}
-    else {
-      setTicketQty((prevQty) => prevQty -1 )
-    }
-  }
-
+const TicketCard: React.FC<TicketCardProps> = ({ ticket, event }) => {
   return (
     <>
       <section className="mb-8 flex gap-4 items-center justify-between pb-4 border-b-2 border-pink-200">
@@ -48,17 +40,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
               <p className="text-xl font-light">{ticket.price}</p>
             )}
           </div>
-          <div className="col-span-1 flex items-center justify-end gap-2">
-            <p onClick={addToOrder} className="p-2 bg-white border-2 border-gray-900 rounded transition-all duration-500 hover:border-pink-500 cursor-pointer">
-              +
-            </p>
-            <p className="p-2 bg-white border-2 border-gray-900 rounded w-10 text-center">
-              {ticketQty}
-            </p>
-            <p onClick={removeFromOrder} className="p-2 bg-white border-2 border-gray-900 rounded transition-all duration-500 hover:border-pink-500 cursor-pointer">
-              -
-            </p>
-          </div>
+          <BasketChange ticket={ticket} event={event} />
         </div>
       </section>
     </>

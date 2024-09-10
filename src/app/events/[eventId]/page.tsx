@@ -18,7 +18,7 @@ export default function SingleEvent() {
   const [date, setDate] = useState<string>("TBD");
 
   const { eventId } = useParams<{ eventId: string }>();
-  console.log(eventId)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -106,7 +106,7 @@ export default function SingleEvent() {
                 </div>
               </div>
             </section>
-            <TicketDisplay eventId={eventId} eventName={event?.name} />
+            <TicketDisplay eventId={eventId} eventName={event?.name} event={event} />
           </>
         ) : (
           <p>Something went wrong. Please try and refresh the page.</p>
