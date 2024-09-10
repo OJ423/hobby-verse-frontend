@@ -37,12 +37,16 @@ export default function NavBar() {
             Events
           </li>
         </Link>
+        {user ? 
+        null
+        :
         <Link href="/user/login" className={`${pathname.includes('/login') ? 'text-pink-500' : 'text-auto'} flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}>
           <MdLogin size={25} aria-label="View active communities"/>
           <li className="list-style-none hidden sm:block font-bold text-xs md:text-lg flex gap-4 justify-start items-center cursor-pointer">
             Login/Register
           </li>
         </Link>
+        }
       </section>
       <section className='flex flex-row justify-between px-4 xl:p-0 start-0 items-center w-[100%] max-w-screen-xl mx-auto'>
           <button onClick={handleMenuOpen}>
@@ -56,12 +60,12 @@ export default function NavBar() {
       </section>
       <div onClick={handleMenuOpen} className={`${!navOpen ? 'invisible opacity-0': 'opacity-50'} w-full h-[100vh] top-0 left-0 bg-gray-300 fixed duration-500 ease-out transition-all cursor-pointer z-20`}>
       </div>
-      <section className={`${!navOpen ? 'translate-x-[-100%]': 'translate-x-0'} w-[60vw] sm:w-[30vw] h-[100vh] bg-white left-0 top-0 opacity-100 fixed duration-500 ease-out transition-all p-8 flex flex-col gap-12 justify-center text-left items-start z-40 shadow-lg`}>
+      <section className={`${!navOpen ? 'translate-x-[-100%]': 'translate-x-0'} w-[60vw] sm:w-[30vw] h-[100vh] bg-white left-0 top-0 opacity-100 fixed duration-500 ease-out transition-all p-8 flex flex-col gap-12 justify-center items-center text-left items-start z-40 shadow-lg`}>
       <Link href='/'>
           <Image 
             src="/hobby-verse.svg"
             alt="Hobby Verse Logo"
-            className='w-20 h-10 md:w-30 md:h-15'
+            className='w-40 h-20'
             width={100}
             height={50}
             priority
