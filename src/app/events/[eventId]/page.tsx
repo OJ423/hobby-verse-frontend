@@ -2,6 +2,7 @@
 
 import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
+import TicketDisplay from "@/components/TicketDisplay";
 import { Event } from "@/utils/customTypes";
 import { dateConverter } from "@/utils/dateConverter";
 import { getEvent } from "@/utils/eventApiCalls";
@@ -17,12 +18,11 @@ export default function SingleEvent() {
   const [date, setDate] = useState<string>("TBD");
 
   const { eventId } = useParams<{ eventId: string }>();
-
+  console.log(eventId)
   useEffect(() => {
     const fetchData = async () => {
       try {
         const eventData = await getEvent(eventId);
-        console.log(eventData);
         const formattedDate = dateConverter(eventData.event.date);
         setDate(formattedDate);
         setEvent(eventData.event);
@@ -57,8 +57,8 @@ export default function SingleEvent() {
                   event.img ? (
                     <Image
                       src={event.img}
-                      width={350}
-                      height={350}
+                      width={550}
+                      height={550}
                       quality={100}
                       priority
                       alt={`${event.name}`}
@@ -67,8 +67,8 @@ export default function SingleEvent() {
                   ) : (
                     <Image
                       src="/event-placeholder-img.webp"
-                      width={350}
-                      height={350}
+                      width={550}
+                      height={550}
                       quality={100}
                       priority
                       alt={`${event.name}`}
@@ -106,6 +106,7 @@ export default function SingleEvent() {
                 </div>
               </div>
             </section>
+            <TicketDisplay eventId={eventId} eventName={event?.name} />
           </>
         ) : (
           <p>Something went wrong. Please try and refresh the page.</p>

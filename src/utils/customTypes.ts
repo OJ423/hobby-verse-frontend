@@ -45,4 +45,18 @@ export interface Category {
   description: string
 }
 
+export interface EventTickets {
+  id: string,
+  event_id: number,
+  ticket_id: number,
+  quantity: number,
+  created_at: string,
+  updated_at: string,
+  name: string,
+  description: string,
+  ticket_head_count: number,
+  price: number,
+  is_free: boolean
+}
+
 
