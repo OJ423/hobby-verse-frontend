@@ -59,4 +59,27 @@ export interface EventTickets {
   is_free: boolean
 }
 
+// Basket Types
+
+export interface Order {
+  total_amount: number;
+  payment_status: string;
+}
+
+export interface OrderItem {
+  event_name: string;
+  event_date: string;
+  ticket_quantity: number;
+  event_ticket_id: number;
+  ticket_name: string;
+  ticket_description: string;
+  ticket_price: number;
+  heads_per_ticket: number;
+}
+export interface Basket {
+  order: Order;
+  order_items: OrderItem[]
+}
+
+
 

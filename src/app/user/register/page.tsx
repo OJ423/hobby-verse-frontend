@@ -4,7 +4,9 @@ import RegistrationForm from "@/components/RegistrationForm";
 export default function Register() {
   return (
     <Layout>
-      <RegistrationForm />
+      <div className="my-20">
+        <RegistrationForm />
+      </div>
     </Layout>
   );
 }
