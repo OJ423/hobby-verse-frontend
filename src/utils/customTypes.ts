@@ -35,6 +35,11 @@ export interface OrderItemsInput {
   quantity: number;
 }
 
+export interface NewAdminUser {
+  email: string,
+  role: string
+}
+
 // API CALL RESPONSES
 
 export interface Event {

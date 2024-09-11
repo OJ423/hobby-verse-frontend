@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoginInputs, RegistrationInputs } from "./customTypes";
+import { LoginInputs, NewAdminUser, RegistrationInputs } from "./customTypes";
 
 const instance = axios.create({
   baseURL: "http://localhost:9090/api/",
@@ -36,3 +36,33 @@ export async function logUserIn(body: LoginInputs) {
     throw err;
   }
 }
+
+export async function getAllAdminStaff(token: string | null ) {
+  try {
+    const response = await instance.get("users/admin", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data
+  }
+  catch(err) {
+    console.log("error getting admin and staff", err)
+    throw err
+  }
+}
+
+export async function patchAdminUser(token: string | null, body: NewAdminUser) {
+  try {
+    const response = await instance.patch("users/admin", body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data
+  }
+  catch(err) {
+    console.log("error adding new Admin user", err)
+    throw err
+  }
+} 

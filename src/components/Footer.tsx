@@ -67,7 +67,7 @@ export default function Footer() {
                     Profile
                   </p>
                 </Link>
-                <Link href={"/user/profile"}>
+                <Link href={"/user/orders"}>
                   <p className="font-medium hover:opacity-50 cursor-pointer transition-all duration-500 pb-4">
                     Your orders
                   </p>

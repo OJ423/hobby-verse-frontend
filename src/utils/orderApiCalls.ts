@@ -32,3 +32,31 @@ export async function getOrder(token: string | null, orderId:string) {
     throw err;
   }
 }
+
+export async function getOrders(token: string | null) {
+  try {
+    const response = await instance.get(`orders`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Error fetching registration data", err);
+    throw err;
+  }
+}
+
+export async function getOrdersByUser(token: string | null) {
+  try {
+    const response = await instance.get(`orders/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Error fetching registration data", err);
+    throw err;
+  }
+}

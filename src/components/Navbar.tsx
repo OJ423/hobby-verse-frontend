@@ -12,7 +12,7 @@ export default function NavBar() {
   const { basket, setToken, setUser, user } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  
+
   function handleMenuOpen(): void {
     setNavOpen(!navOpen);
   }
@@ -145,6 +145,18 @@ export default function NavBar() {
                       Profile
                     </li>
                   </Link>
+                  <Link href="/user/orders">
+                      <li
+                        onClick={handleMenuOpen}
+                        className={`${
+                          pathname.includes("/user/orders")
+                            ? "text-pink-500"
+                            : "text-auto"
+                        } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
+                      >
+                        Your orders
+                      </li>
+                    </Link>
                   {basket ? (
                     <Link href="/basket">
                       <li
@@ -158,9 +170,47 @@ export default function NavBar() {
                         Basket
                       </li>
                     </Link>
+                
                   ) : null}
                 </>
               ) : null}
+
+              {user ? (
+                user.role !== "customer" ? (
+                  <>
+                    <p className="text-xs uppercase font-light mt-8 text-gray-500">
+                      Admin
+                    </p>
+                    <Link href="/admin/orders">
+                      <li
+                        onClick={handleMenuOpen}
+                        className={`${
+                          pathname.includes("/admin/orders")
+                            ? "text-pink-500"
+                            : "text-auto"
+                        } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
+                      >
+                        Orders
+                      </li>
+                    </Link>
+                    <Link href="/admin/users">
+                      <li
+                        onClick={handleMenuOpen}
+                        className={`${
+                          pathname.includes("/admin/users")
+                            ? "text-pink-500"
+                            : "text-auto"
+                        } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
+                      >
+                        Users
+                      </li>
+                    </Link>
+                  </>
+                ) : null
+              ) : null}
+              <p className="text-xs uppercase font-light mt-8 text-gray-500">
+                      Goodbye
+                    </p>
               <li
                 onClick={handleLogOut}
                 className="list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all"

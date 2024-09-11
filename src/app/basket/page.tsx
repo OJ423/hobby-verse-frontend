@@ -115,7 +115,7 @@ export default function Basket() {
                   </p>
                 </div>
               </div>
-              <div className="flex gap-4 items-center justify-between">
+              <div className="flex gap-4 items-center justify-between mt-8">
                 <StyledButton src="/events" linkText="Keep Shopping" />
                 {user ? (
                   user.verified ? (
