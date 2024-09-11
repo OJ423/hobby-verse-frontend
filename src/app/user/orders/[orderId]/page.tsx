@@ -141,7 +141,7 @@ export default function UserOrder() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-4 items-center justify-between">
+                  <div className="flex gap-4 items-center justify-between mt-8">
                     <StyledButton src="/basket" linkText="Print" />
                     <StyledButton src="/checkout/payment" linkText="Add to Calendar" />
                   </div>

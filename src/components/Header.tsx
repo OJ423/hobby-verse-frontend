@@ -63,7 +63,7 @@ export default function Header() {
               className="w-8 h-8 bg-pink-500 p-2 border-4 border-black rounded-full flex items-center justify-center hover:opacity-50 transition-all duration-500"
               href="/user/profile"
             >
-              <p className="font-black">O</p>
+              <p className="font-black">{user.name.charAt(0).toUpperCase()}</p>
             </Link>
           ) : null}
           <NavBar />

@@ -7,9 +7,7 @@ import { dateConverter } from "@/utils/dateConverter";
 
 export default function Checkout() {
   const { user, basket } = useAuth();
-
   
-
   return (
     <Layout>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start gap-16 px-4 md:px-0 w-full md:w-5/6 xl:w-2/3 py-20">
@@ -82,7 +80,7 @@ export default function Checkout() {
                   </p>
                 </div>
               </div>
-              <div className="flex gap-4 items-center justify-between">
+              <div className="flex gap-4 items-center justify-between mt-8">
                 <StyledButton src="/basket" linkText="Back to Basket" />
                 {user ? (
                   user.verified ? (
