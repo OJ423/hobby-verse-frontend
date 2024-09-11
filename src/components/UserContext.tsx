@@ -14,6 +14,7 @@ interface User {
   email: string;
   password_hash: string;
   role: string;
+  verified: boolean;
   created_at: string;
   updated_at: string;
 }

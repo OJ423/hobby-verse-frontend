@@ -1,6 +1,4 @@
-export function dateConverter(stringDate: string) {
-  console.log(stringDate)
-  
+export function dateConverter(stringDate: string) {  
   const date = new Date(stringDate);
   
   const formattedDate = date.toLocaleString('en-GB', {
