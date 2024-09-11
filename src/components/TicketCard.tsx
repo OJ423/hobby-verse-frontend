@@ -1,8 +1,6 @@
 "use client"
 
-import { Basket, Event, EventTickets } from "@/utils/customTypes";
-import { useEffect, useState } from "react";
-import { useAuth } from "./UserContext";
+import { Event, EventTickets } from "@/utils/customTypes";
 import BasketChange from "./BasketChange";
 
 interface TicketCardProps {
