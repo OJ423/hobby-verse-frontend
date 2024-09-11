@@ -77,7 +77,7 @@ export default function Basket() {
                     {item.ticket_price === 0 ? (
                       <p className="text-xl font-light">FREE</p>
                     ) : item.ticket_price === null ? (
-                      <p className="text-xl font-light">Donate a value</p>
+                      <p className="text-xl font-light">£0.00</p>
                     ) : (
                       <p className="text-xl font-light">{item.ticket_price}</p>
                     )}
@@ -121,10 +121,10 @@ export default function Basket() {
                   user.verified ? (
                     <StyledButton src="/checkout" linkText="Checkout" />
                   ) : (
-                    <StyledButton src="/checkout" linkText="Validate Email" />
+                    <StyledButton src="/user/verify-email" linkText="Validate Email" />
                   )
                 ) : (
-                  <StyledButton src="/user/register" linkText="Register" />
+                  <StyledButton src="/user/register" linkText="Register / Login" />
                 )}
               </div>
             </section>

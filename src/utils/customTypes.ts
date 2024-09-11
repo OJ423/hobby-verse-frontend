@@ -23,6 +23,18 @@ export interface User {
   updated_at: string;
 }
 
+export interface OrderInput {
+  total_amount: number;
+  payment_status: string;
+  order_items: OrderItemsInput[];
+}
+
+export interface OrderItemsInput {
+  event_ticket_id: number;
+  ticket_price: number;
+  quantity: number;
+}
+
 // API CALL RESPONSES
 
 export interface Event {
@@ -33,7 +45,7 @@ export interface Event {
   location: string | null;
   capacity: number;
   event_category_id: number | null;
-  category_name: string | null
+  category_name: string | null;
   created_at: string;
   updated_at: string;
   img: string | null;
@@ -41,23 +53,39 @@ export interface Event {
 }
 
 export interface Category {
-  id: number,
-  name: string,
-  description: string
+  id: number;
+  name: string;
+  description: string;
 }
 
 export interface EventTickets {
-  id: string,
-  event_id: number,
-  ticket_id: number,
-  quantity: number,
-  created_at: string,
-  updated_at: string,
-  name: string,
-  description: string,
-  ticket_head_count: number,
-  price: number,
-  is_free: boolean
+  id: string;
+  event_id: number;
+  ticket_id: number;
+  quantity: number;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  description: string;
+  ticket_head_count: number;
+  price: number;
+  is_free: boolean;
+}
+
+export interface OrderAPIReturn {
+  id: number;
+  user_id: 3;
+  customer_name: string;
+  customer_email: string;
+  total_amount: number;
+  payment_status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderConfirmation {
+  order: OrderAPIReturn
+  orderItems: OrderItem[]
 }
 
 // Basket Types
@@ -79,8 +107,5 @@ export interface OrderItem {
 }
 export interface Basket {
   order: Order;
-  order_items: OrderItem[]
+  order_items: OrderItem[];
 }
-
-
-
