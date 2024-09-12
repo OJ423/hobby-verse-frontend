@@ -19,6 +19,7 @@ export default function NavBar() {
 
   function handleLogOut(): void {
     LogUserOut({ setToken, setUser });
+    setNavOpen(!navOpen);
     router.push("/user/login");
   }
 
@@ -146,17 +147,17 @@ export default function NavBar() {
                     </li>
                   </Link>
                   <Link href="/user/orders">
-                      <li
-                        onClick={handleMenuOpen}
-                        className={`${
-                          pathname.includes("/user/orders")
-                            ? "text-pink-500"
-                            : "text-auto"
-                        } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
-                      >
-                        Your orders
-                      </li>
-                    </Link>
+                    <li
+                      onClick={handleMenuOpen}
+                      className={`${
+                        pathname.includes("/user/orders")
+                          ? "text-pink-500"
+                          : "text-auto"
+                      } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
+                    >
+                      Your orders
+                    </li>
+                  </Link>
                   {basket ? (
                     <Link href="/basket">
                       <li
@@ -170,7 +171,6 @@ export default function NavBar() {
                         Basket
                       </li>
                     </Link>
-                
                   ) : null}
                 </>
               ) : null}
@@ -208,15 +208,19 @@ export default function NavBar() {
                   </>
                 ) : null
               ) : null}
-              <p className="text-xs uppercase font-light mt-8 text-gray-500">
-                      Goodbye
-                    </p>
-              <li
-                onClick={handleLogOut}
-                className="list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all"
-              >
-                Logout
-              </li>
+              {user ? (
+                <>
+                  <p className="text-xs uppercase font-light mt-8 text-gray-500">
+                    Goodbye
+                  </p>
+                  <li
+                    onClick={handleLogOut}
+                    className="list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all"
+                  >
+                    Logout
+                  </li>
+                </>
+              ) : null}
             </>
           </ul>
         </section>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoginInputs, NewAdminUser, RegistrationInputs } from "./customTypes";
+import { EditUser, LoginInputs, NewAdminUser, RegistrationInputs } from "./customTypes";
 
 const instance = axios.create({
   baseURL: "http://localhost:9090/api/",
@@ -37,6 +37,38 @@ export async function logUserIn(body: LoginInputs) {
   }
 }
 
+export async function patchUser(token: string | null, userId: number | undefined, body: EditUser) {
+  try {
+    const response = await instance.patch(`users/edit/${userId}`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data
+  }
+  catch(err) {
+    console.log("error adding new Admin user", err)
+    throw err
+  }
+} 
+
+export async function deleteUser(token: string | null, userId: number | undefined) {
+  try {
+    const response = await instance.delete(`users/delete/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data
+  }
+  catch(err) {
+    console.log("error deleting user", err)
+    throw err
+  }
+} 
+
+// Admin & Staff Management
+
 export async function getAllAdminStaff(token: string | null ) {
   try {
     const response = await instance.get("users/admin", {
@@ -66,3 +98,5 @@ export async function patchAdminUser(token: string | null, body: NewAdminUser) {
     throw err
   }
 } 
+
+

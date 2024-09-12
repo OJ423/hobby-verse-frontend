@@ -41,7 +41,6 @@ const OrderCard: React.FC<OrderCardProps> = ({src}) => {
         console.log("Something went wrong", err);
         if (axios.isAxiosError(err)) {
           if (err.response?.status === 401) {
-            console.log("Error 401 <<<<<<<<<<")
             setOrdersErr(
               "Your login token has expired. Please login to refresh your token to view these orders."
             );
