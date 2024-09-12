@@ -23,6 +23,10 @@ body {
   min-height: 100vh;
 }
 
+input.checkbox {
+  padding: 5px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
