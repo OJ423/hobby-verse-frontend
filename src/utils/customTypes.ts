@@ -23,6 +23,11 @@ export interface User {
   updated_at: string;
 }
 
+export interface EditUser {
+  name: string;
+  email: string;
+}
+
 export interface OrderInput {
   total_amount: number;
   payment_status: string;

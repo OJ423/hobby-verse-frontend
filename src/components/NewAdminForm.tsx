@@ -16,10 +16,8 @@ export default function NewAdminForm() {
 
   const onSubmit: SubmitHandler<NewAdminUser> = async (data) => {
     try {
-      console.log(data);
       const localToken = localStorage.getItem("token");
       const userData = await patchAdminUser(localToken, data);
-      console.log(userData);
       localStorage.setItem("token", userData.token);
       setToken(userData.token);
     } catch (error) {
@@ -44,7 +42,8 @@ export default function NewAdminForm() {
         className="p-4 mb-4 rounded"
         placeholder="Email Address"
         {...register("email", {
-          required: "Email is required",
+          required: "Valid email address is required",
+          pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         })}
         id="email"
         name="email"
