@@ -41,8 +41,27 @@ export interface OrderItemsInput {
 }
 
 export interface NewAdminUser {
-  email: string,
-  role: string
+  email: string;
+  role: string;
+}
+
+export interface TicketInput {
+  name:string;
+  description:string;
+  limitations:string;
+  qty_tickets:number;
+  price:number;
+  is_free:boolean;
+  updated_at:string;
+}
+
+export interface NewTicketInput {
+  name:string;
+  description:string;
+  limitations:string;
+  qty_tickets:number;
+  price:number;
+  is_free:boolean;
 }
 
 // API CALL RESPONSES
@@ -69,7 +88,7 @@ export interface Category {
 }
 
 export interface EventTickets {
-  id: string;
+  id: number;
   event_id: number;
   ticket_id: number;
   quantity: number;
@@ -80,6 +99,18 @@ export interface EventTickets {
   ticket_head_count: number;
   price: number;
   is_free: boolean;
+}
+
+export interface Ticket {
+  id:string;
+  name:number;
+  description:string;
+  limitations:string;
+  qty_tickets:number;
+  price:number;
+  is_free:boolean;
+  created_at:string;
+  updated_at:string;
 }
 
 export interface OrderAPIReturn {
@@ -94,8 +125,8 @@ export interface OrderAPIReturn {
 }
 
 export interface OrderConfirmation {
-  order: OrderAPIReturn
-  orderItems: OrderItem[]
+  order: OrderAPIReturn;
+  orderItems: OrderItem[];
 }
 
 // Basket Types

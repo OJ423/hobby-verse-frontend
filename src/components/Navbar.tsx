@@ -205,6 +205,18 @@ export default function NavBar() {
                         Users
                       </li>
                     </Link>
+                    <Link href="/admin/tickets">
+                      <li
+                        onClick={handleMenuOpen}
+                        className={`${
+                          pathname.includes("/admin/tickets")
+                            ? "text-pink-500"
+                            : "text-auto"
+                        } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
+                      >
+                        Tickets
+                      </li>
+                    </Link>
                   </>
                 ) : null
               ) : null}
