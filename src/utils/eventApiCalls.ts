@@ -1,4 +1,5 @@
 import axios from "axios";
+import { EventEditInput } from "./customTypes";
 
 const instance = axios.create({
   baseURL: "http://localhost:9090/api/",
@@ -30,6 +31,24 @@ export async function getEvent(categoryId: string | null) {
   }
 }
 
+export async function patchEvent(token: string | null, eventId: number, body:EventEditInput) {
+  try {
+    const response = await instance.patch(`events/edit/${eventId}`, body,{
+      headers:{
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.data)
+    return response.data
+  }
+  catch(err) {
+    console.log("Error fetching data", err)
+    throw err
+  }
+}
+
+// Get Categories
+
 export async function getCategories() {
   try {
     const response = await instance.get("categories");
@@ -39,3 +58,5 @@ export async function getCategories() {
     throw err;
   }
 }
+
+

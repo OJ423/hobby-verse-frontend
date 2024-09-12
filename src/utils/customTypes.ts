@@ -50,7 +50,7 @@ export interface TicketInput {
   description:string;
   limitations:string;
   qty_tickets:number;
-  price:number;
+  price:number | null;
   is_free:boolean;
   updated_at:string;
 }
@@ -60,8 +60,21 @@ export interface NewTicketInput {
   description:string;
   limitations:string;
   qty_tickets:number;
-  price:number;
+  price:number | null;
   is_free:boolean;
+}
+
+export interface EventEditInput {
+  name: string;
+  description: string | null;
+  date: string;
+  location: string | null;
+  capacity: number;
+  event_category_id: number | null;
+  category_name: string | null;
+  updated_at: string;
+  img: string | null;
+  status: string;
 }
 
 // API CALL RESPONSES
@@ -102,8 +115,8 @@ export interface EventTickets {
 }
 
 export interface Ticket {
-  id:string;
-  name:number;
+  id:number;
+  name:string;
   description:string;
   limitations:string;
   qty_tickets:number;
