@@ -181,6 +181,18 @@ export default function NavBar() {
                     <p className="text-xs uppercase font-light mt-8 text-gray-500">
                       Admin
                     </p>
+                    <Link href="/admin/draft-events">
+                      <li
+                        onClick={handleMenuOpen}
+                        className={`${
+                          pathname.includes("/admin/draft-events")
+                            ? "text-pink-500"
+                            : "text-auto"
+                        } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
+                      >
+                        Draft Events
+                      </li>
+                    </Link>
                     <Link href="/admin/orders">
                       <li
                         onClick={handleMenuOpen}

@@ -1,27 +1,27 @@
-import { Category, Event, EventEditInput } from "@/utils/customTypes";
+import { Category, EventEditInput } from "@/utils/customTypes";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAuth } from "./UserContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getCategories, patchEvent,  } from "@/utils/eventApiCalls";
+import { getCategories, postEvent } from "@/utils/eventApiCalls";
+import { useRouter } from "next/navigation";
 
-interface EventEditFormProps {
+interface EventAddFormProps {
   showForm: boolean;
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
   setApiErr: React.Dispatch<React.SetStateAction<string | null>>;
-  event: Event;
-  selectedImage: string
+  selectedImage: string;
 }
 
-const EventEditForm: React.FC<EventEditFormProps> = ({
+const EventAddForm: React.FC<EventAddFormProps> = ({
   setShowForm,
   showForm,
   setApiErr,
-  event,
-  selectedImage
+  selectedImage,
 }) => {
   const { setToken, setUser } = useAuth();
   const [categories, setCategories] = useState<Category[] | []>([]);
+  const router = useRouter();
 
   const {
     register,
@@ -32,30 +32,23 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
 
   const onSubmit: SubmitHandler<EventEditInput> = async (data) => {
     try {
-      const getCategoryIdByName = (): number | undefined => {
-        const category = categories.find(
-          (category) => category.name === data.category_name
-        );
-        return category?.id;
-      };
+      console.log(data.category_name);
       const requestBody = {
         name: data.name,
         description: data.description,
         date: data.date,
         location: data.location,
         capacity: data.capacity,
-        event_category_id: +getCategoryIdByName,
-        category_name: data.category_name,
-        updated_at: data.updated_at,
+        event_category_id: +data.category_name,
         img: data.img,
-        status: data.status,
+        status: "draft",
       };
-      console.log(requestBody)
       const localToken = localStorage.getItem("token");
-      const eventData = await patchEvent(localToken, event.id, requestBody);
+      const eventData = await postEvent(localToken, requestBody);
       localStorage.setItem("token", eventData.token);
       setToken(eventData.token);
       setShowForm(!showForm);
+      router.push(`/events/${eventData.event.id}`);
     } catch (err) {
       console.log("Something went wrong", err);
       if (axios.isAxiosError(err)) {
@@ -74,12 +67,6 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
     }
   };
 
-  const formatDateTime = (eventDate:string) => {
-    const date = new Date(eventDate);
-    const formattedDate = date.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
-    return formattedDate;
-  };
-
   useEffect(() => {
     // Fetch Category Data
     const fetchData = async () => {
@@ -94,30 +81,18 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       }
     };
     fetchData();
-    // Set Existing Form Values
-    if (event) {
-      setValue("name", event.name);
-      setValue("description", event.description);
-      setValue("location", event.location);
-      setValue("capacity", event.capacity);
-      setValue("event_category_id", event.event_category_id);
-      const eventDateTime = formatDateTime(event.date); // Format the date
-      setValue("date", eventDateTime); // Set the value for the datetime-local input
-      setValue("updated_at", new Date().toISOString().slice(0, 16));
-      let newImg:string;
-      if(selectedImage.length) {
-        newImg = selectedImage
-      }
-      else if (event.img?.length) {
-          newImg = event.img
-      } else {
-        newImg = "/event-placeholder-img.webp"
-      }
-      setValue("img", newImg);
-      setValue("status", event.status);
 
+    // Set Existing Form Values
+
+    let newImg: string;
+    if (selectedImage.length) {
+      newImg = selectedImage;
+    } else {
+      newImg = "/event-placeholder-img.webp";
     }
-  }, [setApiErr, event, setValue, selectedImage]);
+    setValue("img", newImg);
+    setValue("status", "draft");
+  }, [selectedImage, setApiErr, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
@@ -193,7 +168,7 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       </label>
       <input
         className="p-4 rounded border-2 border-pink-200"
-        placeholder="Capacity"
+        placeholder="Event capacity"
         {...register("capacity", {
           valueAsNumber: true,
         })}
@@ -225,7 +200,7 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       >
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
-            {`${cat.id}, ${cat.name}`}
+            {cat.name}
           </option>
         ))}
       </select>
@@ -244,10 +219,8 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
         id="img"
         name="img"
       />
-      <label className="text-xs text-gray-400 py-4" htmlFor="status">
-        Event Date
-      </label>
       <select
+        hidden
         className="p-4 rounded border-2 border-pink-200"
         {...register("status")}
         id="status"
@@ -258,10 +231,10 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       </select>
       <input
         className="cursor-pointer inline-flex items-center rounded-full px-9 py-3 text-xl font-semibold text-pink-500 hover:text-white border-2 border-pink-500 hover:bg-pink-500 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-75 hover:bg-pink-500 duration-300 mt-8"
-        type="submit"
+        type="submit" value="Submit"
       />
     </form>
   );
 };
 
-export default EventEditForm;
+export default EventAddForm;

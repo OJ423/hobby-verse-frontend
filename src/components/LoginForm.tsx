@@ -82,7 +82,7 @@ export default function LoginForm() {
 
         <input
           className="cursor-pointer inline-flex items-center rounded-full px-9 py-3 text-xl font-semibold text-pink-500 hover:text-white border-2 border-pink-500 hover:bg-pink-500 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-75 hover:bg-pink-500 duration-300"
-          type="submit"
+          type="submit" value="Submit"
           />
       </form>
       <p>Not got an account? <Link href="/user/register" className="font-bold text-pink-500 mt-8">Register</Link>.</p>

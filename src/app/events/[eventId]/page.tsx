@@ -2,22 +2,25 @@
 
 import EventEditForm from "@/components/EventEditForm";
 import FormDrawer from "@/components/FormDrawer";
+import ImageSearch from "@/components/ImageSearch";
 import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
 import StyledButton from "@/components/StyledButton";
 import TicketDisplay from "@/components/TicketDisplay";
 import { useAuth } from "@/components/UserContext";
-import { Event } from "@/utils/customTypes";
+import { Event, UnsplashImage } from "@/utils/customTypes";
 import { dateConverter } from "@/utils/dateConverter";
-import { getEvent } from "@/utils/eventApiCalls";
+import { deleteEvent, getEvent } from "@/utils/eventApiCalls";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineEmojiPeople, MdOutlineMap } from "react-icons/md";
 
+
 export default function SingleEvent() {
-  const {token} = useAuth()
+  const { token, setToken, setUser } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [date, setDate] = useState<string>("TBD");
@@ -26,8 +29,23 @@ export default function SingleEvent() {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [apiErr, setApiErr] = useState<string | null>(null);
 
+  // Image Select
+  const [selectedImage, setSelectedImage] = useState("");
+  const [images, setImages] = useState<UnsplashImage[] | []>([]);
+  const [imageConfirm, setImageConfirm] = useState<string>("")
+  
+  const router = useRouter()
+
+  const handleImageSelect = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setImages([])
+    setImageConfirm("Event image selected")
+  };
+
+  // Show Edit Form
   const handleDisplayForm = () => {
     setShowForm(!showForm);
+    setImageConfirm("")
   };
 
   const { eventId } = useParams<{ eventId: string }>();
@@ -36,7 +54,32 @@ export default function SingleEvent() {
     setDeleteCheck(!deleteCheck);
   };
 
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    try {
+      if (event) {
+        const localToken = localStorage.getItem("token");
+        const data = await deleteEvent(localToken, event.id);
+        setToken(data.token)
+        localStorage.setItem("token", data.token)
+        router.back()
+      }
+    } catch (err) {
+      console.log("Something went wrong", err);
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setApiErr(
+            "Your login token has expired. Please login to refresh your token to complete this action."
+          );
+          setUser(null);
+          localStorage.removeItem("user")
+          setToken(null);
+          localStorage.removeItem("token")
+        }
+      } else {
+        setApiErr("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
 
   useEffect(() => {
     const localUser = localStorage.getItem("user");
@@ -63,7 +106,7 @@ export default function SingleEvent() {
 
     fetchData();
   }, [eventId, token]);
-
+  
   return (
     <>
       <Layout>
@@ -92,7 +135,7 @@ export default function SingleEvent() {
                       quality={100}
                       priority
                       alt={`${event.name}`}
-                      className="w-full h-full object-cover rounded-t mb-4"
+                      className="w-full h-full object-cover rounded mb-4"
                     />
                   ) : (
                     <Image
@@ -102,7 +145,7 @@ export default function SingleEvent() {
                       quality={100}
                       priority
                       alt={`${event.name}`}
-                      className="w-full h-full object-cover rounded-t mb-4"
+                      className="w-full h-full object-cover rounded mb-4"
                     />
                   )
                 ) : null}
@@ -148,11 +191,18 @@ export default function SingleEvent() {
                       showForm={showForm}
                       handleDisplayForm={handleDisplayForm}
                     >
+                      <ImageSearch
+                        onSelectImage={handleImageSelect}
+                        images={images}
+                        setImages={setImages}
+                        imageConfirm={imageConfirm}
+                      />
                       <EventEditForm
                         showForm={showForm}
                         setShowForm={setShowForm}
                         event={event}
                         setApiErr={setApiErr}
+                        selectedImage={selectedImage}
                       />
                     </FormDrawer>
                     {!deleteCheck ? (

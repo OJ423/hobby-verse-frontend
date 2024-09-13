@@ -2,7 +2,7 @@ import axios from "axios";
 import { EditUser, LoginInputs, NewAdminUser, RegistrationInputs } from "./customTypes";
 
 const instance = axios.create({
-  baseURL: "http://localhost:9090/api/",
+  baseURL: process.env.NEXT_PUBLIC_API_HOST,
 });
 
 export async function registerUser(body:RegistrationInputs) {

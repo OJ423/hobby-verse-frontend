@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 export default function Footer() {
   const { user, setUser, setToken } = useAuth();
   const [categories, setCategories] = useState<Category[] | []>([]);
-  const router = useRouter()
+  const router = useRouter();
 
   function handleLogOut(): void {
     LogUserOut({ setToken, setUser });
@@ -30,7 +30,7 @@ export default function Footer() {
     } catch (err) {
       console.log(err);
     }
-  });
+  },[]);
 
   return (
     <footer className="w-screen pt-20 bg-gray-200 flex flex-col items-center justify-start">
@@ -81,9 +81,11 @@ export default function Footer() {
               </div>
             </>
           ) : (
-            <p className="font-medium hover:opacity-50 cursor-pointer transition-all duration-500 text-center">
-              Login / Register
-            </p>
+            <Link href="/user/login">
+              <p className="font-medium hover:opacity-50 cursor-pointer transition-all duration-500 text-center">
+                Login / Register
+              </p>
+            </Link>
           )}
         </div>
         <div>
