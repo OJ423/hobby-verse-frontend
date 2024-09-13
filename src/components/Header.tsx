@@ -55,7 +55,7 @@ export default function Header() {
         </section>
           {basket ? (
             <Link href="/basket">
-              <FaShoppingBasket size={24} />
+              <FaShoppingBasket size={24} className="transition-all duration-500 hover:opacity-50" />
             </Link>
           ) : null}
           {user ? (

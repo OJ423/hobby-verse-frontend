@@ -1,25 +1,94 @@
 "use client";
 
+import EventEditForm from "@/components/EventEditForm";
+import FormDrawer from "@/components/FormDrawer";
+import ImageSearch from "@/components/ImageSearch";
 import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
+import StyledButton from "@/components/StyledButton";
 import TicketDisplay from "@/components/TicketDisplay";
-import { Event } from "@/utils/customTypes";
+import { useAuth } from "@/components/UserContext";
+import { Event, UnsplashImage } from "@/utils/customTypes";
 import { dateConverter } from "@/utils/dateConverter";
-import { getEvent } from "@/utils/eventApiCalls";
+import { deleteEvent, getEvent } from "@/utils/eventApiCalls";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineEmojiPeople, MdOutlineMap } from "react-icons/md";
 
+
 export default function SingleEvent() {
+  const { token, setToken, setUser } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [date, setDate] = useState<string>("TBD");
+  const [adminCheck, setAdminCheck] = useState<boolean>(false);
+  const [deleteCheck, setDeleteCheck] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [apiErr, setApiErr] = useState<string | null>(null);
+
+  // Image Select
+  const [selectedImage, setSelectedImage] = useState("");
+  const [images, setImages] = useState<UnsplashImage[] | []>([]);
+  const [imageConfirm, setImageConfirm] = useState<string>("")
+  
+  const router = useRouter()
+
+  const handleImageSelect = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setImages([])
+    setImageConfirm("Event image selected")
+  };
+
+  // Show Edit Form
+  const handleDisplayForm = () => {
+    setShowForm(!showForm);
+    setImageConfirm("")
+  };
 
   const { eventId } = useParams<{ eventId: string }>();
 
+  const handleDeleteCheck = () => {
+    setDeleteCheck(!deleteCheck);
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (event) {
+        const localToken = localStorage.getItem("token");
+        const data = await deleteEvent(localToken, event.id);
+        setToken(data.token)
+        localStorage.setItem("token", data.token)
+        router.back()
+      }
+    } catch (err) {
+      console.log("Something went wrong", err);
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setApiErr(
+            "Your login token has expired. Please login to refresh your token to complete this action."
+          );
+          setUser(null);
+          localStorage.removeItem("user")
+          setToken(null);
+          localStorage.removeItem("token")
+        }
+      } else {
+        setApiErr("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
   useEffect(() => {
+    const localUser = localStorage.getItem("user");
+    if (localUser) {
+      const user = JSON.parse(localUser);
+      if (user.role === "staff" || user.role === "admin") {
+        setAdminCheck(true);
+      }
+    }
     const fetchData = async () => {
       try {
         const eventData = await getEvent(eventId);
@@ -29,12 +98,15 @@ export default function SingleEvent() {
         setLoading(false);
       } catch (err) {
         console.log(err);
+        setApiErr(
+          "Something went wrong fetching the data, please try and refresh the page"
+        );
       }
     };
 
     fetchData();
-  }, [eventId]);
-
+  }, [eventId, token]);
+  
   return (
     <>
       <Layout>
@@ -44,15 +116,16 @@ export default function SingleEvent() {
           </section>
         ) : event ? (
           <>
-            <section className="my-4 w-full pt-4 md:px-0 md:w-9/12 lg:w-2/3">
-              <Link  
+            <section className="my-4 w-full pt-4 px-4 max-w-screen-lg">
+              <Link
                 href="/events"
-                className="text-xs text-pink-500 font-bold transition-all duration-500 hover:text-gray-900">
-              {`< Back to events`}
+                className="text-xs text-pink-500 font-bold transition-all duration-500 hover:text-gray-900"
+              >
+                {`< Back to events`}
               </Link>
             </section>
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center  mt-4 w-full px-4 md:px-0 md:w-9/12 lg:w-2/3 mb-8">
-              <div className="w-full h-full md:px-8">
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center  mt-4 w-full px-4 max-w-screen-lg mb-8">
+              <div className="w-full h-full">
                 {event ? (
                   event.img ? (
                     <Image
@@ -62,7 +135,7 @@ export default function SingleEvent() {
                       quality={100}
                       priority
                       alt={`${event.name}`}
-                      className="w-full h-full p-4 object-cover rounded-t mb-4"
+                      className="w-full h-full object-cover rounded mb-4"
                     />
                   ) : (
                     <Image
@@ -72,41 +145,100 @@ export default function SingleEvent() {
                       quality={100}
                       priority
                       alt={`${event.name}`}
-                      className="w-full h-full p-4 object-cover rounded-t mb-4"
+                      className="w-full h-full object-cover rounded mb-4"
                     />
                   )
                 ) : null}
               </div>
-              <div className="flex flex-col gap-4 m-4 md:m-8 border-4 border-pink-500 rounded p-4 md:p-8">
-                <div className="flex justify-between items-center gap-4 border-b-2 border-pink-200 pb-4 md:pb-8">
-                  <p className="py-2 px-4 bg-pink-500 text-white font-bold text-sm rounded">
-                    {date}
-                  </p>
-                  <p className="text-xs font-semibold p-2 bg-gray-200 rounded border-2 border-gray-400">
-                    {event.category_name}
-                  </p>
+              <div>
+                <div className="flex flex-col gap-4 mb-4 border-4 border-pink-500 rounded p-4 md:p-8">
+                  <div className="flex justify-between items-center gap-4 border-b-2 border-pink-200 pb-4 md:pb-8">
+                    <p className="py-2 px-4 bg-pink-500 text-white font-bold text-sm rounded">
+                      {date}
+                    </p>
+                    <p className="text-xs font-semibold p-2 bg-gray-200 rounded border-2 border-gray-400">
+                      {event.category_name}
+                    </p>
+                  </div>
+                  <h1 className="text-2xl leading-2">{event.name}</h1>
+                  <p>{event.description}</p>
+                  <div className="flex gap-4 items-center">
+                    <MdOutlineEmojiPeople size={25} />
+                    <p className="text-xs font-bold">
+                      Room for a total of {event.capacity} people
+                    </p>
+                  </div>
+                  <div className="flex gap-4 items-center">
+                    {event.location ? (
+                      <>
+                        <MdOutlineMap size={25} />
+                        <p className="text-xs font-bold">
+                          Location: {event.location}
+                        </p>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
-                <h1 className="text-2xl leading-2">{event.name}</h1>
-                <p>{event.description}</p>
-                <div className="flex gap-4 items-center">
-                  <MdOutlineEmojiPeople size={25} />
-                  <p className="text-xs font-bold">
-                    Room for a total of {event.capacity} people
-                  </p>
-                </div>
-                <div className="flex gap-4 items-center">
-                  {event.location ? (
-                    <>
-                      <MdOutlineMap size={25} />
-                      <p className="text-xs font-bold">
-                        Location: {event.location}
-                      </p>
-                    </>
-                  ) : null}
-                </div>
+                {adminCheck ? (
+                  <div className="flex items-center justify-center gap-4">
+                    <p className="text-xs font-bold text-gray-600">
+                      Admin Zone:
+                    </p>
+                    <div onClick={handleDisplayForm}>
+                      <StyledButton src="" linkText="Edit" />
+                    </div>
+                    <FormDrawer
+                      showForm={showForm}
+                      handleDisplayForm={handleDisplayForm}
+                    >
+                      <ImageSearch
+                        onSelectImage={handleImageSelect}
+                        images={images}
+                        setImages={setImages}
+                        imageConfirm={imageConfirm}
+                      />
+                      <EventEditForm
+                        showForm={showForm}
+                        setShowForm={setShowForm}
+                        event={event}
+                        setApiErr={setApiErr}
+                        selectedImage={selectedImage}
+                      />
+                    </FormDrawer>
+                    {!deleteCheck ? (
+                      <button
+                        onClick={handleDeleteCheck}
+                        className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                      >
+                        Delete
+                      </button>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-4">
+                          <button
+                            onClick={handleDelete}
+                            className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                          >
+                            Confirm
+                          </button>
+                          <div onClick={handleDeleteCheck}>
+                            <StyledButton src="" linkText="Cancel" />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {apiErr ? (
+                      <p className="text-red-500 font-bold">{apiErr}</p>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
             </section>
-            <TicketDisplay eventId={eventId} eventName={event?.name} event={event} />
+            <TicketDisplay
+              eventId={eventId}
+              eventName={event?.name}
+              event={event}
+            />
           </>
         ) : (
           <p>Something went wrong. Please try and refresh the page.</p>

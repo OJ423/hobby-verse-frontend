@@ -8,7 +8,7 @@ export default function Events() {
   return (
     <>
       <Layout>
-        <EventsList status="published" />
+        <EventsList status="draft" />
       </Layout>
     </>
   );

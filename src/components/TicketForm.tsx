@@ -41,9 +41,9 @@ const TicketForm: React.FC<TicketFormProps> = ({
             "Your login token has expired. Please login to refresh your token to complete this action."
           );
           setUser(null);
-          localStorage.removeItem("user")
+          localStorage.removeItem("user");
           setToken(null);
-          localStorage.removeItem("token")
+          localStorage.removeItem("token");
         }
       } else {
         setApiErr("An unexpected error occurred. Please try again.");
@@ -77,6 +77,11 @@ const TicketForm: React.FC<TicketFormProps> = ({
         id="name"
         name="name"
       />
+      {errors.description && (
+        <span className="text-rose-600 text-xs font-bold">
+          Name is required and requires to be at least 4 characters
+        </span>
+      )}
       <label className="text-xs text-gray-400 py-4" htmlFor="description">
         Event description
       </label>
@@ -96,7 +101,7 @@ const TicketForm: React.FC<TicketFormProps> = ({
         </span>
       )}
       <label className="text-xs text-gray-400 py-4" htmlFor="limitations">
-        Event limitations
+        Ticket limitations
       </label>
       <p className="text-xs my-2">
         If there any limitations, i.e. the need to bring equipment or age
@@ -122,7 +127,7 @@ const TicketForm: React.FC<TicketFormProps> = ({
         id="qty_tickets"
         name="qty_tickets"
       />
-      {errors.description && (
+      {errors.qty_tickets && (
         <span className="text-rose-600 text-xs font-bold">
           Heads per ticket requires a number, at least 1
         </span>
@@ -142,7 +147,7 @@ const TicketForm: React.FC<TicketFormProps> = ({
         id="price"
         name="price"
       />
-      {errors.description && (
+      {errors.price && (
         <span className="text-rose-600 text-xs font-bold">
           Price needs to be a number or empty for pay-what-you-want tickets.
         </span>
@@ -152,9 +157,9 @@ const TicketForm: React.FC<TicketFormProps> = ({
           Is Event Free? (Check for yes)
         </label>
         <div className="flex items-center gap-4">
-
           <p className="text-xs my-2">
-            Check free if you want to make this ticket free. It will override any price you add.
+            Check free if you want to make this ticket free. It will override
+            any price you add.
           </p>
           <input
             type="checkbox"
