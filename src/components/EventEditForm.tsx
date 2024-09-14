@@ -32,11 +32,12 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
 
   const onSubmit: SubmitHandler<EventEditInput> = async (data) => {
     try {
-      const getCategoryIdByName = (): number | undefined => {
+      const getCategoryNameById = (): number | undefined => {
         const category = categories.find(
-          (category) => category.name === data.category_name
+          (category) => category.id === +data.category_name
         );
-        return category?.id;
+        if(category) return category?.id
+        else {return 1}
       };
       const requestBody = {
         name: data.name,
@@ -44,13 +45,12 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
         date: data.date,
         location: data.location,
         capacity: data.capacity,
-        event_category_id: +getCategoryIdByName,
+        event_category_id: getCategoryNameById(),
         category_name: data.category_name,
         updated_at: data.updated_at,
         img: data.img,
         status: data.status,
       };
-      console.log(requestBody)
       const localToken = localStorage.getItem("token");
       const eventData = await patchEvent(localToken, event.id, requestBody);
       localStorage.setItem("token", eventData.token);
@@ -225,7 +225,7 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       >
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
-            {`${cat.id}, ${cat.name}`}
+            {cat.name}
           </option>
         ))}
       </select>

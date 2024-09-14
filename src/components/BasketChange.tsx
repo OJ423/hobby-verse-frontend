@@ -12,18 +12,18 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
   const [ticketQty, setTicketQty] = useState<number>(0);
 
   useEffect(() => {
-    if(basket) {
+    if (basket) {
       basket.order_items.forEach((item) => {
         if (+item.event_ticket_id === +ticket.id) {
-          setTicketQty(item.ticket_quantity)
+          setTicketQty(item.ticket_quantity);
         }
-      })
+      });
     }
-  },[])
-  
-  
+  }, []);
+
   const addToOrder = async () => {
     let basketUpdate: Basket | null = null;
+    if (ticketQty === ticket.quantity) return;
 
     if (!basket) {
       // Create a new basket if one doesn't exist
@@ -46,7 +46,6 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
         ],
       };
     } else {
- 
       // If a basket exists, check if the ticket already exists in the order_items
       const existingItemIndex = basket.order_items.findIndex(
         (item) => +item.event_ticket_id === +ticket.id
@@ -113,7 +112,6 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
 
     if (existingItemIndex >= 0) {
       const existingItem = basket.order_items[existingItemIndex];
-      console.log(existingItem)
 
       let basketUpdate: Basket | null;
 
@@ -140,7 +138,6 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
           (item) => +item.event_ticket_id !== +ticket.id
         );
 
-
         // If no more items in the basket, set the basket to null
         if (updatedOrderItems.length === 0) {
           basketUpdate = null;
@@ -156,17 +153,21 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
           };
         }
       }
-      
+
       // Set States
       setTicketQty((prevQty) => (prevQty > 0 ? prevQty - 1 : 0));
-      setBasket(basketUpdate)
+      setBasket(basketUpdate);
       localStorage.setItem("basket", JSON.stringify(basketUpdate));
     }
   };
 
-return (<>
-<div className="col-span-1 flex items-center justify-end gap-2">
-            
+  return (
+    <>
+      <div className="col-span-1 flex items-center justify-end gap-2">
+        {ticket.quantity === 0 ? (
+          <p className="font-bold text-red-500 uppercase">Sold Out</p>
+        ) : (
+          <>
             <p
               onClick={removeFromOrder}
               aria-label="Remove 1 ticket"
@@ -184,9 +185,11 @@ return (<>
             >
               +
             </p>
-          </div>
-</>)
+          </>
+        )}
+      </div>
+    </>
+  );
+};
 
-}
-
-export default BasketChange
+export default BasketChange;
