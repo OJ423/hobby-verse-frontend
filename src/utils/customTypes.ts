@@ -70,7 +70,7 @@ export interface EventEditInput {
   date: string;
   location: string | null;
   capacity: number;
-  event_category_id: number;
+  event_category_id: number | undefined;
   category_name: string;
   updated_at: string;
   img: string | null;
@@ -88,6 +88,12 @@ export interface EventAddInput {
   status: string;
 }
 
+export interface EventTicketInput {
+  ticket_id: number;
+  event_id: number;
+  quantity: number;
+}
+
 // API CALL RESPONSES
 
 export interface Event {
@@ -97,8 +103,8 @@ export interface Event {
   date: string;
   location: string | null;
   capacity: number;
-  event_category_id: number | null;
-  category_name: string | null;
+  event_category_id: number;
+  category_name: string;
   created_at: string;
   updated_at: string;
   img: string | null;

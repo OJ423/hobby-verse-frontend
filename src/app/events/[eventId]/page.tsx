@@ -1,6 +1,7 @@
 "use client";
 
 import EventEditForm from "@/components/EventEditForm";
+import EventTicketsAdd from "@/components/EventTicketsAdd";
 import FormDrawer from "@/components/FormDrawer";
 import ImageSearch from "@/components/ImageSearch";
 import IsLoading from "@/components/IsLoading";
@@ -28,6 +29,7 @@ export default function SingleEvent() {
   const [deleteCheck, setDeleteCheck] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [apiErr, setApiErr] = useState<string | null>(null);
+  const [formType, setFormType] = useState<string>("")
 
   // Image Select
   const [selectedImage, setSelectedImage] = useState("");
@@ -42,8 +44,25 @@ export default function SingleEvent() {
     setImageConfirm("Event image selected")
   };
 
-  // Show Edit Form
+  // Generic Show Form
   const handleDisplayForm = () => {
+    setShowForm(!showForm);
+    setImageConfirm("")
+  };
+
+  // Show Edit Form
+
+  const handleDisplayEditForm = () => {
+    setApiErr(null)
+    setFormType("edit")
+    setShowForm(!showForm);
+    setImageConfirm("")
+  };
+
+  // Show Add Ticket Form
+  const handleDisplayTicketForm = () => {
+    setApiErr(null)
+    setFormType("ticket")
     setShowForm(!showForm);
     setImageConfirm("")
   };
@@ -180,17 +199,23 @@ export default function SingleEvent() {
                   </div>
                 </div>
                 {adminCheck ? (
+                  <div>
                   <div className="flex items-center justify-center gap-4">
                     <p className="text-xs font-bold text-gray-600">
                       Admin Zone:
                     </p>
-                    <div onClick={handleDisplayForm}>
+                    <div onClick={handleDisplayTicketForm}>
+                      <StyledButton src="" linkText="Add Tickets" />
+                    </div>
+                    <div onClick={handleDisplayEditForm}>
                       <StyledButton src="" linkText="Edit" />
                     </div>
                     <FormDrawer
                       showForm={showForm}
                       handleDisplayForm={handleDisplayForm}
                     >
+                      {formType === "edit" ?
+                      <>
                       <ImageSearch
                         onSelectImage={handleImageSelect}
                         images={images}
@@ -204,6 +229,16 @@ export default function SingleEvent() {
                         setApiErr={setApiErr}
                         selectedImage={selectedImage}
                       />
+                      </>
+                      : 
+                      <EventTicketsAdd
+                        showForm={showForm}
+                        setShowForm={setShowForm}
+                        event={event}
+                        setApiErr={setApiErr}
+                        apiErr={apiErr}
+                      />
+                      }
                     </FormDrawer>
                     {!deleteCheck ? (
                       <button
@@ -227,8 +262,9 @@ export default function SingleEvent() {
                         </div>
                       </>
                     )}
+                  </div>
                     {apiErr ? (
-                      <p className="text-red-500 font-bold">{apiErr}</p>
+                      <p className="text-red-500 font-bold mt-4">{apiErr}</p>
                     ) : null}
                   </div>
                 ) : null}

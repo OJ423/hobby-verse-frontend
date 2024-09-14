@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NewTicketInput, TicketInput } from "./customTypes";
+import { EventTicketInput, NewTicketInput, TicketInput } from "./customTypes";
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_HOST,
@@ -69,6 +69,56 @@ export async function patchTicket(token: string | null, ticketId: number | undef
 export async function deleteTicket(token: string | null, ticketId: number) {
   try {
     const response = await instance.delete(`tickets/delete/${ticketId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+      return response.data;
+
+    } catch (err) {
+    console.log("Error fetching event data", err);
+    throw err;
+  }
+}
+
+// Event Tickets
+
+export async function postEventTicket(token: string | null, body:EventTicketInput) {
+  try {
+    const response = await instance.post(`event-tickets/new`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+      return response.data;
+
+    } catch (err) {
+    console.log("Error fetching event data", err);
+    throw err;
+  }
+}
+
+export async function patchEventTicket(token: string | null, eventTicketId: number, body:EventTicketInput) {
+  try {
+    const response = await instance.patch(`event-tickets/edit/${eventTicketId}`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+      return response.data;
+
+    } catch (err) {
+    console.log("Error fetching event data", err);
+    throw err;
+  }
+}
+
+export async function deleteEventTicket(token: string | null, eventTicketId: number) {
+  try {
+    const response = await instance.delete(`event-tickets/delete/${eventTicketId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

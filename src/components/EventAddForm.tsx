@@ -194,16 +194,22 @@ const EventAddForm: React.FC<EventAddFormProps> = ({
       </label>
       <select
         className="p-4 rounded border-2 border-pink-200"
-        {...register("category_name")}
+        {...register("category_name", { required: "Please select a category" })}
         id="category_name"
         name="category_name"
       >
+        <option value="">Please select</option>
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
             {cat.name}
           </option>
         ))}
       </select>
+      {errors.category_name && (
+          <span className="text-rose-600 text-xs font-bold">
+            Please select a category
+          </span>
+        )}
       <input
         hidden
         className="p-4 rounded border-2 border-pink-200"
@@ -231,7 +237,8 @@ const EventAddForm: React.FC<EventAddFormProps> = ({
       </select>
       <input
         className="cursor-pointer inline-flex items-center rounded-full px-9 py-3 text-xl font-semibold text-pink-500 hover:text-white border-2 border-pink-500 hover:bg-pink-500 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-75 hover:bg-pink-500 duration-300 mt-8"
-        type="submit" value="Submit"
+        type="submit"
+        value="Submit"
       />
     </form>
   );
