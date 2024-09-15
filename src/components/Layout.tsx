@@ -9,7 +9,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Header />
-      <main className="flex flex-col items-center justify-center px-4">
+      <main className="flex flex-col items-center justify-center px-4 max-w-screen-xl mx-auto">
         {children}
       </main>
       <Footer />

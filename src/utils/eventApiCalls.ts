@@ -1,5 +1,5 @@
 import axios from "axios";
-import { EventAddInput, EventEditInput } from "./customTypes";
+import { CategoryInput, EventAddInput, EventEditInput } from "./customTypes";
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_HOST,
@@ -89,5 +89,47 @@ export async function getCategories() {
     throw err;
   }
 }
+
+export async function postCategory(token: string | null, body: CategoryInput) {
+  try {
+    const response = await instance.post(`categories/new`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Error fetching event data", err);
+    throw err;
+  }
+} 
+
+export async function patchCategory(token: string | null, catId: number, body: CategoryInput) {
+  try {
+    const response = await instance.patch(`categories/edit/${catId}`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Error fetching event data", err);
+    throw err;
+  }
+} 
+
+export async function deleteCategory(token: string | null, catId: number) {
+  try {
+    const response = await instance.delete(`categories/delete/${catId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response.data;
+  } catch (err) {
+    console.log("Error fetching event data", err);
+    throw err;
+  }
+} 
 
 

@@ -94,6 +94,11 @@ export interface EventTicketInput {
   quantity: number;
 }
 
+export interface CategoryInput {
+  name: string;
+  description: string | null;
+}
+
 // API CALL RESPONSES
 
 export interface Event {
