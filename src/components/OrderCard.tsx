@@ -73,7 +73,7 @@ const OrderCard: React.FC<OrderCardProps> = ({src}) => {
           {orders.map((order) => (
             <section
               key={order.id}
-              className="flex w-fit gap-8 items-center justify-between pb-4 border-b-2 border-pink-200 cursor-pointer transition-all duration-500 hover:bg-pink-100 py-2 px-4"
+              className="flex flex-wrap w-fit gap-8 items-center justify-between pb-4 border-b-2 border-pink-200 cursor-pointer transition-all duration-500 hover:bg-pink-100 py-2 px-4"
             >
               <p className="font-black text-3xl">{order.id}</p>
               <div className="flex flex-col">

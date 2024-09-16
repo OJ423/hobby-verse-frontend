@@ -10,7 +10,7 @@ import StyledButton from "@/components/StyledButton";
 import TicketDisplay from "@/components/TicketDisplay";
 import { useAuth } from "@/components/UserContext";
 import { Event, UnsplashImage } from "@/utils/customTypes";
-import { dateConverter } from "@/utils/dateConverter";
+import { dateConverter, dateToTimeConverter } from "@/utils/dateConverter";
 import { deleteEvent, getEvent } from "@/utils/eventApiCalls";
 import axios from "axios";
 import Image from "next/image";
@@ -24,7 +24,6 @@ export default function SingleEvent() {
   const { token, setToken, setUser } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [date, setDate] = useState<string>("TBD");
   const [adminCheck, setAdminCheck] = useState<boolean>(false);
   const [deleteCheck, setDeleteCheck] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -111,8 +110,6 @@ export default function SingleEvent() {
     const fetchData = async () => {
       try {
         const eventData = await getEvent(eventId);
-        const formattedDate = dateConverter(eventData.event.date);
-        setDate(formattedDate);
         setEvent(eventData.event);
         setLoading(false);
       } catch (err) {
@@ -173,7 +170,7 @@ export default function SingleEvent() {
                 <div className="flex flex-col gap-4 mb-4 border-4 border-pink-500 rounded p-4 md:p-8">
                   <div className="flex justify-between items-center gap-4 border-b-2 border-pink-200 pb-4 md:pb-8">
                     <p className="py-2 px-4 bg-pink-500 text-white font-bold text-sm rounded">
-                      {date}
+                      {dateConverter(event.date)} - {dateToTimeConverter(event.end_date)}
                     </p>
                     <p className="text-xs font-semibold p-2 bg-gray-200 rounded border-2 border-gray-400">
                       {event.category_name}

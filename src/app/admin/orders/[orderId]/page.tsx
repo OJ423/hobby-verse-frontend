@@ -2,7 +2,6 @@
 
 import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
-import StyledButton from "@/components/StyledButton";
 import { useAuth } from "@/components/UserContext";
 import { OrderConfirmation } from "@/utils/customTypes";
 import { dateConverter } from "@/utils/dateConverter";
@@ -18,6 +17,10 @@ export default function AdminOrder() {
   const [orderFetchErr, setOrderFetchErr] = useState<string | null>(null);
   const [orderData, setOrderData] = useState<OrderConfirmation | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  
+  const handlePrint = () => {
+    window.print()
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,8 +145,12 @@ export default function AdminOrder() {
                     </div>
                   </div>
                   <div className="flex gap-4 items-center justify-between mt-8">
-                    <StyledButton src="/basket" linkText="Print" />
-                    <StyledButton src="/checkout/payment" linkText="Add to Calendar" />
+                    <button
+                      onClick={handlePrint}
+                      className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                    >
+                      Print
+                    </button>
                   </div>
                 </section>
               </>

@@ -78,83 +78,79 @@ const EventsList: React.FC<EventsListProps> = ({ status }) => {
   }, [params, status]);
 
   return (
-      <section className="flex flex-col gap-8 max-w-screen-lg mx-auto my-20">
-        {adminCheck ? (
-          apiErr ? (
-            <p className="font-bold text-red-500">{apiErr}</p>
+    <section className="flex flex-col gap-8 max-w-screen-lg mx-auto my-20">
+      {adminCheck ? (
+        apiErr ? (
+          <p className="font-bold text-red-500">{apiErr}</p>
+        ) : null
+      ) : null}
+
+      <div className="flex justify-between items-center gap-4">
+        <h1 className="font-bold text-3xl">Events</h1>
+
+        {pathname.includes("events") ? (
+          adminCheck ? (
+            <>
+              <button
+                onClick={handleDisplayForm}
+                className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"
+              >
+                Add New
+              </button>
+              <FormDrawer
+                showForm={showForm}
+                handleDisplayForm={handleDisplayForm}
+              >
+                <ImageSearch
+                  onSelectImage={handleImageSelect}
+                  images={images}
+                  setImages={setImages}
+                  imageConfirm={imageConfirm}
+                />
+                <EventAddForm
+                  showForm={showForm}
+                  setShowForm={setShowForm}
+                  setApiErr={setApiErr}
+                  selectedImage={selectedImage}
+                />
+              </FormDrawer>
+            </>
           ) : null
         ) : null}
+      </div>
 
-        <div className="flex justify-between items-center gap-4">
-          <h1 className="font-bold text-3xl">Events</h1>
-
-          {pathname.includes("events") ? (
-            adminCheck ? (
-              <>
-                <button
-                  onClick={handleDisplayForm}
-                  className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"
-                >
-                  Add New
-                </button>
-                <FormDrawer
-                  showForm={showForm}
-                  handleDisplayForm={handleDisplayForm}
-                >
-                  <ImageSearch
-                    onSelectImage={handleImageSelect}
-                    images={images}
-                    setImages={setImages}
-                    imageConfirm={imageConfirm}
-                  />
-                  <EventAddForm
-                    showForm={showForm}
-                    setShowForm={setShowForm}
-                    setApiErr={setApiErr}
-                    selectedImage={selectedImage}
-                  />
-                </FormDrawer>
-              </>
-            ) : null
-          ) : null}
-        </div>
-        {pathname.includes("/events") ? (
-          !eventsList.length ? (
-            <p>There are not events currently. Check again later.</p>
-          ) : (
-            <>
-              <div className="w-full flex gap-8 items-center">
-                <p className="font-bold">Filter events by category:</p>
-                <form id="catSelect">
-                  <select
-                    name="category"
-                    id="categories"
-                    form="catSelect"
-                    className="p-2 text-sm"
-                    onChange={handleCatSelect}
-                  >
-                    <option value="all">All</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                </form>
-              </div>
-            </>
-          )
-        ) : null}
-        {loading ? (
-          <IsLoading loading={loading} />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-stretch items-stretch">
-            {eventsList.map((event: Event) => (
-              <EventsCard key={event.id} event={event} />
+      <div className="w-full flex gap-8 items-center">
+        <p className="font-bold">Filter events by category:</p>
+        <form id="catSelect">
+          <select
+            name="category"
+            id="categories"
+            form="catSelect"
+            className="p-2 text-sm"
+            onChange={handleCatSelect}
+          >
+            <option value="all">All</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
             ))}
-          </div>
-        )}
-      </section>
+          </select>
+        </form>
+      </div>
+
+      {loading ? (
+        <IsLoading loading={loading} />
+      ) : eventsList.length ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-stretch items-stretch">
+          {eventsList.map((event: Event) => (
+            <EventsCard key={event.id} event={event} />
+          ))}
+        </div>
+      ) : (
+        <p>There are not events currently. Check again later.</p>
+      )}
+    </section>
   );
 };
 
