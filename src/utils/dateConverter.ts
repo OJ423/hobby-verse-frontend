@@ -1,14 +1,10 @@
+import { DateTime } from 'luxon';
+
 export function dateConverter(stringDate: string) {
-  const date = new Date(stringDate);
 
-  const formattedDate = date.toLocaleString("en-GB", {
-    timeZone: "Europe/London",
-    year: "numeric",
-    day: "numeric",
-    month: "long",
-    hour: "numeric",
-    minute: "numeric",
-  });
+  const localDate = DateTime.fromISO(stringDate, { zone: 'utc' })
+  .setZone('Europe/London')
+  .toFormat('dd/MM/yyyy HH:mm');
 
-  return formattedDate;
+  return localDate;
 }

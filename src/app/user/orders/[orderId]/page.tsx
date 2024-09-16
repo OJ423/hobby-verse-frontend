@@ -2,7 +2,6 @@
 
 import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
-import StyledButton from "@/components/StyledButton";
 import { useAuth } from "@/components/UserContext";
 import { OrderConfirmation } from "@/utils/customTypes";
 import { dateConverter } from "@/utils/dateConverter";
@@ -18,6 +17,10 @@ export default function UserOrder() {
   const [orderFetchErr, setOrderFetchErr] = useState<string | null>(null);
   const [orderData, setOrderData] = useState<OrderConfirmation | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const handlePrint = () => {
+    window.print()
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -120,7 +123,11 @@ export default function UserOrder() {
                     </div>
                   ))}
                 </div>
-                <section className="md:mt-16">
+                <section className="">
+                  <div className="p-4 bg-pink-100 rounded mb-4">
+                    <p className="font-bold">{user.name}</p>
+                    <p className="font-light">{user.email}</p>
+                  </div>
                   <div className="lg:col-span-1 flex flex-col gap-4 p-4 border-4 border-pink-100 rounded">
                     <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
                     {orderData.orderItems.map((item) => (
@@ -142,8 +149,12 @@ export default function UserOrder() {
                     </div>
                   </div>
                   <div className="flex gap-4 items-center justify-between mt-8">
-                    <StyledButton src="/basket" linkText="Print" />
-                    <StyledButton src="/checkout/payment" linkText="Add to Calendar" />
+                    <button
+                      onClick={handlePrint}
+                      className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                    >
+                      Print
+                    </button>
                   </div>
                 </section>
               </>
