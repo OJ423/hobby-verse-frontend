@@ -4,6 +4,7 @@ import { useAuth } from "./UserContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getCategories, patchEvent,  } from "@/utils/eventApiCalls";
+import { formDateConverter } from "@/utils/dateConverter";
 
 interface EventEditFormProps {
   showForm: boolean;
@@ -27,8 +28,11 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<EventEditInput>();
+
+  const startDate = watch("date");
 
   const onSubmit: SubmitHandler<EventEditInput> = async (data) => {
     try {
@@ -43,6 +47,7 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
         name: data.name,
         description: data.description,
         date: data.date,
+        end_date:data.end_date,
         location: data.location,
         capacity: data.capacity,
         event_category_id: getCategoryNameById(),
@@ -74,12 +79,6 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
     }
   };
 
-  const formatDateTime = (eventDate:string) => {
-    const date = new Date(eventDate);
-    const formattedDate = date.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
-    return formattedDate;
-  };
-
   useEffect(() => {
     // Fetch Category Data
     const fetchData = async () => {
@@ -101,8 +100,8 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       setValue("location", event.location);
       setValue("capacity", event.capacity);
       setValue("event_category_id", event.event_category_id);
-      const eventDateTime = formatDateTime(event.date); // Format the date
-      setValue("date", eventDateTime); // Set the value for the datetime-local input
+      setValue("date", formDateConverter(event.date)); // Set the value for the datetime-local input
+      setValue("end_date", formDateConverter(event.end_date))
       setValue("updated_at", new Date().toISOString().slice(0, 16));
       let newImg:string;
       if(selectedImage.length) {
@@ -153,16 +152,12 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       />
       {errors.description && (
         <span className="text-rose-600 text-xs font-bold">
-          Description is required and requires to be at least 10 characters
+          {errors.description.message}
         </span>
       )}
-      <label className="text-xs text-gray-400 py-4" htmlFor="limitations">
+      <label className="text-xs text-gray-400 py-4" htmlFor="date">
         Event Date
       </label>
-      <p className="text-xs my-2">
-        If there any limitations, i.e. the need to bring equipment or age
-        limits. Please add here.{" "}
-      </p>
       <input
         type="datetime-local"
         className="p-4 rounded border-2 border-pink-200"
@@ -175,7 +170,30 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       />
       {errors.date && (
         <span className="text-rose-600 text-xs font-bold">
-          Date must be included and in the future
+          {errors.date.message}
+        </span>
+      )}
+      <label className="text-xs text-gray-400 py-4" htmlFor="end_date">
+        Event End Date
+      </label>
+      <input
+        type="datetime-local"
+        className="p-4 rounded border-2 border-pink-200"
+        placeholder="Date & Time"
+        {...register("end_date", {
+          required: "Date must be provided",
+          validate: (value) => {
+            if (startDate && new Date(value) <= new Date(startDate)) {
+              return "End date must be after the start date";
+            }
+          },
+        })}
+        id="end_date"
+        name="end_date"
+      />
+      {errors.end_date && (
+        <span className="text-rose-600 text-xs font-bold">
+          {errors.end_date.message}
         </span>
       )}
       <label className="text-xs text-gray-400 py-4" htmlFor="qty_tickets">

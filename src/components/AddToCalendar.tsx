@@ -1,27 +1,31 @@
-import { Event, Order } from "@/utils/customTypes";
+import { UserTicket } from "@/utils/customTypes";
 
 interface AddToCalendarProps {
-  event: Order;
+  event: UserTicket;
 }
 
 const AddToCalendar: React.FC<AddToCalendarProps> = ({ event }) => {
   const handleAddToGoogleCalendar = () => {
     if (event) {
       const formattedEvent = {
-        summary: event.,
-        description: (event.description = ""),
-        location: event.location,
-        startDate: event.date.replace(/-|:|\.\d\d\d/g, ""),
+        summary: event.event_name,
+        description: (event.event_description),
+        location: event.event_location,
+        startDate: event.event_date,
+        endDate: event.event_end_date,
         timeZone: "Europe/London",
       };
+      const formattedStartDate = formattedEvent.startDate.replace(/-|:|\.\d\d\d/g, '');
+      const formattedEndDate = formattedEvent.endDate.replace(/-|:|\.\d\d\d/g, '');
+
 
       const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
         formattedEvent.summary
       )}&details=${encodeURIComponent(
         formattedEvent.description
       )}&location=${encodeURIComponent(formattedEvent.location || "")}&dates=${
-        formattedEvent.startDate
-      }&ctz=${formattedEvent.timeZone}`;
+        formattedStartDate
+      }/${formattedEndDate}&ctz=${formattedEvent.timeZone}`;
 
       window.open(calendarUrl, "_blank");
     }

@@ -27,8 +27,12 @@ const EventAddForm: React.FC<EventAddFormProps> = ({
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<EventEditInput>();
+
+  const startDate = watch("date");
+
 
   const onSubmit: SubmitHandler<EventEditInput> = async (data) => {
     try {
@@ -37,6 +41,7 @@ const EventAddForm: React.FC<EventAddFormProps> = ({
         name: data.name,
         description: data.description,
         date: data.date,
+        end_date:data.end_date,
         location: data.location,
         capacity: data.capacity,
         event_category_id: +data.category_name,
@@ -131,13 +136,9 @@ const EventAddForm: React.FC<EventAddFormProps> = ({
           Description is required and requires to be at least 10 characters
         </span>
       )}
-      <label className="text-xs text-gray-400 py-4" htmlFor="limitations">
+      <label className="text-xs text-gray-400 py-4" htmlFor="date">
         Event Date
       </label>
-      <p className="text-xs my-2">
-        If there any limitations, i.e. the need to bring equipment or age
-        limits. Please add here.{" "}
-      </p>
       <input
         type="datetime-local"
         className="p-4 rounded border-2 border-pink-200"
@@ -150,7 +151,30 @@ const EventAddForm: React.FC<EventAddFormProps> = ({
       />
       {errors.date && (
         <span className="text-rose-600 text-xs font-bold">
-          Date must be included and in the future
+          {errors.date.message}
+        </span>
+      )}
+            <label className="text-xs text-gray-400 py-4" htmlFor="end_date">
+        Event End Date
+      </label>
+      <input
+        type="datetime-local"
+        className="p-4 rounded border-2 border-pink-200"
+        placeholder="Date & Time"
+        {...register("end_date", {
+          required: "Date must be provided",
+          validate: (value) => {
+            if (startDate && new Date(value) <= new Date(startDate)) {
+              return "End date must be after the start date";
+            }
+          },
+        })}
+        id="end_date"
+        name="end_date"
+      />
+      {errors.end_date && (
+        <span className="text-rose-600 text-xs font-bold">
+          {errors.end_date.message}
         </span>
       )}
       <label className="text-xs text-gray-400 py-4" htmlFor="qty_tickets">

@@ -61,7 +61,8 @@ export default function UserTickets() {
             {apiErr ? (
               <p className="font-bold text-red-500 my-4">{apiErr}</p>
             ) : (
-              <>
+              <section className="grid grid-cols-1 md:grid-cols-2 items-stretch gap-4">
+
                 {userTickets.length ? (
                   <>
                     {userTickets.map((ticket) => (
@@ -74,7 +75,7 @@ export default function UserTickets() {
                 ) : (
                   <p>{`You don't have any tickets`}</p>
                 )}
-              </>
+              </section>
             )}
           </>
         )}
