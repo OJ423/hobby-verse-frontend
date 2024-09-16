@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     <header className="w-[100%] box-sizing p-4 bg-white shadow-lg">
-      <section className="flex flex-row justify-between max-w-screen-xl mx-auto items-center gap-4">
+      <section className="flex flex-row justify-between max-w-screen-xl mx-auto items-center gap-8">
         <Link className="max-w-[50%]" href="/">
           <Image
             src="/hobby-verse.svg"
@@ -27,7 +27,7 @@ export default function Header() {
           />
         </Link>
         <div className="flex gap-2 md:gap-4 items-center">
-        <section className="flex gap-8 justify-end">
+        <section className="flex gap-8 items-center justify-end">
           <Link
             href="/events"
             className={`${
