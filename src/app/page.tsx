@@ -1,7 +1,9 @@
 import EventsList from "@/components/EventList";
+import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -13,7 +15,10 @@ export default function Home() {
               Welcome to the Hobby Verse
             </h1>
             <p className="font-medium text-lg">
-              Hobby Verse is brought to you by Altrincham Art&apos;s council and is a place for those who are interested in a variety of creative projects. From photography to cooking, we aim to provide a range of free and paid for events to feed your creative side.
+              Hobby Verse is brought to you by Altrincham Art&apos;s council and
+              is a place for those who are interested in a variety of creative
+              projects. From photography to cooking, we aim to provide a range
+              of free and paid for events to feed your creative side.
             </p>
             <div className="flex gap-4">
               <Link
@@ -41,7 +46,9 @@ export default function Home() {
             />
           </div>
         </section>
-        <EventsList />
+        <Suspense fallback={<IsLoading loading={true} />}>
+          <EventsList status="property" />
+        </Suspense>
       </Layout>
     </>
   );
