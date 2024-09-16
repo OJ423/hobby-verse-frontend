@@ -4,10 +4,10 @@ import { Event, EventTickets } from "@/utils/customTypes";
 import BasketChange from "./BasketChange";
 import { useEffect, useState } from "react";
 import StyledButton from "./StyledButton";
-import axios from "axios";
 import { useAuth } from "./UserContext";
 import { deleteEventTicket } from "@/utils/ticketApiCalls";
 import EventTicketsEdit from "./EventTicketsEdit";
+import { handleApiError } from "@/utils/apiErrors";
 
 interface TicketCardProps {
   ticket: EventTickets;
@@ -20,6 +20,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, event }) => {
   const { setUser, setToken } = useAuth();
   const [apiErr, setApiErr] = useState<string | null>(null);
   const [showEdit, setShowEdit] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false)
 
   const handleDeleteCheck = () => {
     setDeleteCheck(!deleteCheck);
@@ -36,22 +37,16 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, event }) => {
         const data = await deleteEventTicket(localToken, ticket.id);
         setToken(data.token);
         localStorage.setItem("token", data.token);
+        
       }
     } catch (err) {
-      console.log("Something went wrong", err);
-      if (axios.isAxiosError(err)) {
-        if (err.response?.status === 401) {
-          setApiErr(
-            "Your login token has expired. Please login to refresh your token to complete this action."
-          );
-          setUser(null);
-          localStorage.removeItem("user");
-          setToken(null);
-          localStorage.removeItem("token");
-        }
-      } else {
-        setApiErr("An unexpected error occurred. Please try again.");
-      }
+      handleApiError({
+        err,
+        setApiErr,
+        setLoading,
+        setUser,
+        setToken,
+      });
     }
   };
 
@@ -61,7 +56,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, event }) => {
       const user = JSON.parse(localUser);
       if (user.role === "admin" || user.role === "staff") setAdminCheck(true);
     }
-  }, []);
+  }, [loading]);
 
   return (
     <>

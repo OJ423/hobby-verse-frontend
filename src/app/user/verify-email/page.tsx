@@ -51,7 +51,7 @@ export default function VerifyEmail() {
             </div>
           </>
         ) : (
-          <>
+          <div className="my-40">
             <h1 className="text-3xl mb-8 font-bold">
               Please verify your email.
             </h1>
@@ -59,7 +59,7 @@ export default function VerifyEmail() {
               Check your email and click on the link to verify your Hobby Verse
               account.
             </p>
-          </>
+          </div>
         )}
       </Layout>
   );
