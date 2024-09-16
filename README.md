@@ -53,11 +53,58 @@ Now,
 npm install
 ```
 
-this will install all the dependencies for the app to run
+to install all the dependencies for the app to run.
 
-your package.json should look like this
+Your package.json should look like this
 
-First, run the development server:
+```json
+{
+  "name": "hobby-verse-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "luxon": "^3.5.0",
+    "next": "14.2.8",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
+    "react-icons": "^5.3.0",
+    "react-spinners": "^0.14.1"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.8",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
+
+```
+
+### Environment
+You need to create a `.env` file at the root directory.
+
+```bash
+NEXT_PUBLIC_UNSPLASH_API_KEY=your-api-key
+NEXT_PUBLIC_UNSPLASH_SECRET=your-unspash-secret
+NEXT_PUBLIC_IMAGE_HOST=https://api.unsplash.com/
+NEXT_PUBLIC_API_HOST=https://-YOUR-LOCAL-HOST
+```
+
+#### Start the development server:
 
 ```bash
 npm run dev
@@ -68,23 +115,25 @@ pnpm dev
 # or
 bun dev
 ```
+You will need to clone, set up and start the [Hobby Verse server](https://github.com/OJ423/hobby-verse). *Set up instructions included in the repo.*
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
+- Next.js - React framework
+- Axios
+- React Hook Form
+- Luxon (local data conversion)
+- TypeScript
+- Tailwind
+- React icons
+- React spinners (loading)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Build
 
-## Learn More
+To build run `npm run build`
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
