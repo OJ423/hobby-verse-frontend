@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <Layout>
         <section className="mx-auto py-8 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center max-w-screen-xl">
-          <div className="md:w-full mx-auto order-last md:order-first">
+          <div className="md:w-full mx-auto order-last md:order-first text-center md:text-left">
             <h1 className="font-bold text-3xl lg:text-5xl mb-8">
               Welcome to the Hobby Verse
             </h1>
@@ -18,7 +18,7 @@ export default function Home() {
               projects. From photography to cooking, we aim to provide a range
               of free and paid for events to feed your creative side.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 justify-center md:justify-start">
               <Link
                 href="/user/login"
                 className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl mt-8 uppercase font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out"
