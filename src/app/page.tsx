@@ -1,9 +1,7 @@
-import EventsList from "@/components/EventList";
-import IsLoading from "@/components/IsLoading";
+
 import Layout from "@/components/Layout";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -46,9 +44,6 @@ export default function Home() {
             />
           </div>
         </section>
-        <Suspense fallback={<IsLoading loading={true} />}>
-          <EventsList status="property" />
-        </Suspense>
       </Layout>
     </>
   );
