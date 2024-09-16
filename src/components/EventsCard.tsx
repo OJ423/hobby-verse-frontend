@@ -17,26 +17,26 @@ const EventsCard: React.FC<ListProps> = ({ event }) => {
   const formattedDate = dateConverter(event.date)
 
   return (
-    <section className="rounded bg-gray-200 shadow-lg">
+    <section className="flex flex-col rounded bg-gray-200 shadow-lg justify-between">
       {event.img ?
       <Image
-      src={event.img}
-      width={200}
-      height={100}
-      quality={60}
-      priority
-      alt={`${event.name}`}
-      className="w-full h-60 object-cover rounded-t mb-4"
-    />
+        src={event.img}
+        width={200}
+        height={100}
+        quality={60}
+        priority
+        alt={`${event.name}`}
+        className="w-full h-60 object-cover rounded-t mb-4"
+      />
       :
       <Image
-      src="/event-placeholder-img.webp"
-      width={200}
-      height={100}
-      quality={60}
-      priority
-      alt={`${event.name}`}
-      className="w-full h-60 object-cover rounded-t mb-4"
+        src="/event-placeholder-img.webp"
+        width={200}
+        height={100}
+        quality={60}
+        priority
+        alt={`${event.name}`}
+        className="w-full h-60 object-cover rounded-t mb-4"
       />
       }
 

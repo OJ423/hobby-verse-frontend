@@ -41,7 +41,7 @@ const TicketDisplay: React.FC<EventTicketProps> = ({
       {loading ? (
         <IsLoading loading={loading} />
       ) : eventTickets.length ? (
-        <section className="flex flex-col gap-4 my-8 w-full md:w-9/12 lg:w-2/3">
+        <section className="flex flex-col gap-4 my-8 max-w-screen-xl">
           <div className="flex items-center gap-4 border-b-2 border-pink-500 pb-8">
             <IoTicketOutline size={42} className="text-pink-500" />
             <h1 className="text-3xl font-light">Tickets for {eventName}</h1>

@@ -68,6 +68,7 @@ export interface EventEditInput {
   name: string;
   description: string | null;
   date: string;
+  end_date: string;
   location: string | null;
   capacity: number;
   event_category_id: number | undefined;
@@ -81,6 +82,7 @@ export interface EventAddInput {
   name: string;
   description: string | null;
   date: string;
+  end_date:string;
   location: string | null;
   capacity: number;
   event_category_id: number;
@@ -106,6 +108,7 @@ export interface Event {
   name: string;
   description: string | null;
   date: string;
+  end_date:string;
   location: string | null;
   capacity: number;
   event_category_id: number;
@@ -169,6 +172,7 @@ export interface UserTicket {
   event_description: string,
   event_location: string,
   event_date: string,
+  event_end_date:string,
   ticket_name: string,
   ticket_description: string,
   ticket_quantity: number,

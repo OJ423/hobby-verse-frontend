@@ -8,3 +8,20 @@ export function dateConverter(stringDate: string) {
 
   return localDate;
 }
+
+export function dateToTimeConverter(stringDate: string) {
+
+  const localDate = DateTime.fromISO(stringDate, { zone: 'utc' })
+  .setZone('Europe/London')
+  .toFormat('HH:mm');
+
+  return localDate;
+}
+
+export function formDateConverter(stringDate:string) {
+  const localDate = DateTime.fromISO(stringDate, {zone: 'utc'})
+  .setZone('Europe/London')
+  .toFormat("yyyy-MM-dd'T'HH:mm");
+  
+  return localDate
+}
