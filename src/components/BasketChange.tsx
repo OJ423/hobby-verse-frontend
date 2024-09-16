@@ -209,7 +209,7 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
                 onChange={handleCustomPriceChange}
                 className="border-2 border-pink-200 p-2 rounded w-20 text-center"
               />
-            ) : ticket.price : ticket.price}
+            ) : null : null}
             <p
               onClick={removeFromOrder}
               aria-label="Remove 1 ticket"

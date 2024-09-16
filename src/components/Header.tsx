@@ -26,36 +26,40 @@ export default function Header() {
             style={{ height: "auto" }}
           />
         </Link>
-        <div className="flex gap-2 md:gap-4 items-center">
-        <section className="flex gap-8 items-center justify-end">
-          <Link
-            href="/events"
-            className={`${
-              pathname.includes("/events") ? "text-pink-500" : "text-auto"
-            } flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}
-          >
-            <MdEvent size={25} aria-label="View events" />
-            <li className="list-style-none hidden sm:block font-bold text-xs md:text-lg flex gap-4 justify-start items-center cursor-pointer">
-              Events
-            </li>
-          </Link>
-          {user ? null : (
+        <div className="flex gap-8 items-center">
+          <section className="flex gap-8 items-center justify-end">
             <Link
-              href="/user/login"
+              href="/events"
               className={`${
-                pathname.includes("/login") ? "text-pink-500" : "text-auto"
+                pathname.includes("/events") ? "text-pink-500" : "text-auto"
               } flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}
             >
-              <MdLogin size={25} aria-label="View active communities" />
+              <MdEvent size={25} aria-label="View events" />
               <li className="list-style-none hidden sm:block font-bold text-xs md:text-lg flex gap-4 justify-start items-center cursor-pointer">
-                Login/Register
+                Events
               </li>
             </Link>
-          )}
-        </section>
+            {user ? null : (
+              <Link
+                href="/user/login"
+                className={`${
+                  pathname.includes("/login") ? "text-pink-500" : "text-auto"
+                } flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}
+              >
+                <MdLogin size={25} aria-label="View active communities" />
+                <li className="list-style-none hidden sm:block font-bold text-xs md:text-lg flex gap-4 justify-start items-center cursor-pointer">
+                  Login/Register
+                </li>
+              </Link>
+            )}
+          </section>
           {basket ? (
             <Link href="/basket">
-              <FaShoppingBasket size={24} aria-label="Shopping basket" className="transition-all duration-500 hover:opacity-50" />
+              <FaShoppingBasket
+                size={24}
+                aria-label="Shopping basket"
+                className="transition-all duration-500 hover:opacity-50"
+              />
             </Link>
           ) : null}
           {user ? (
