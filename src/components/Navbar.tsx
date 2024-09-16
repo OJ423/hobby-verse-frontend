@@ -117,16 +117,6 @@ export default function NavBar() {
                 Events
               </li>
             </Link>
-            <Link href="/about">
-              <li
-                onClick={handleMenuOpen}
-                className={`${
-                  pathname.includes("/about") ? "text-pink-500" : "text-auto"
-                } list-style-none font-bold text-lg mb-4 flex gap-4 justify-start items-center cursor-pointer hover:text-gray-400 duration-500 ease-out transition-all`}
-              >
-                About
-              </li>
-            </Link>
 
             <>
               {user ? (
