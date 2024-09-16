@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     <header className="w-[100%] box-sizing p-4 bg-white shadow-lg">
-      <section className="flex flex-row justify-between max-w-screen-xl mx-auto items-center gap-2">
+      <section className="flex flex-row justify-between max-w-screen-xl mx-auto items-center gap-4">
         <Link className="max-w-[50%]" href="/">
           <Image
             src="/hobby-verse.svg"
@@ -34,7 +34,7 @@ export default function Header() {
               pathname.includes("/events") ? "text-pink-500" : "text-auto"
             } flex gap-2 hover:text-gray-400 transition-all duration-500 ease-out items-center`}
           >
-            <MdEvent size={25} aria-label="View active communities" />
+            <MdEvent size={25} aria-label="View events" />
             <li className="list-style-none hidden sm:block font-bold text-xs md:text-lg flex gap-4 justify-start items-center cursor-pointer">
               Events
             </li>
@@ -55,12 +55,13 @@ export default function Header() {
         </section>
           {basket ? (
             <Link href="/basket">
-              <FaShoppingBasket size={24} className="transition-all duration-500 hover:opacity-50" />
+              <FaShoppingBasket size={24} aria-label="Shopping basket" className="transition-all duration-500 hover:opacity-50" />
             </Link>
           ) : null}
           {user ? (
             <Link
               className="w-8 h-8 bg-pink-500 p-2 border-4 border-black rounded-full flex items-center justify-center hover:opacity-50 transition-all duration-500"
+              aria-label="Profile page"
               href="/user/profile"
             >
               <p className="font-black">{user.name.charAt(0).toUpperCase()}</p>
