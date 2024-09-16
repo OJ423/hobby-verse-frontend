@@ -1,23 +1,23 @@
 "use client";
 
 import { useAuth } from "@/components/UserContext";
-import { User } from "@/utils/customTypes";
+import { NewAdminUser, User } from "@/utils/customTypes";
 import { getAllAdminStaff, patchAdminUser } from "@/utils/userApiCalls";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import IsLoading from "./IsLoading";
 import { dateConverter } from "@/utils/dateConverter";
 import StyledButton from "./StyledButton";
+import { handleApiError } from "@/utils/apiErrors";
 
 export default function UserCard() {
   const { setUser, setToken } = useAuth();
   const [users, setUsers] = useState<User[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [userErr, setUserErr] = useState<string | null>(null);
+  const [apiErr, setApiErr] = useState<string | null>(null);
+  const localToken = localStorage.getItem("token")
 
   const handleRemoveAdmin = async (email:string) => {
     try {
-      const localToken = localStorage.getItem("token")
       const body = {
         email:email,
         role:"customer"
@@ -26,6 +26,24 @@ export default function UserCard() {
     }
     catch(err) {
       console.log(err)
+    }
+  }
+
+  const handleRoleChange = async (body: NewAdminUser) => {
+    try {
+      const data = await patchAdminUser(localToken, body)
+      setToken(data.token)
+      localStorage.setItem("token", data.token)
+
+    } catch(err) {
+      handleApiError({
+        err,
+        setApiErr,
+        setLoading,
+        setUser,
+        setToken
+      });
+
     }
   }
   
@@ -38,23 +56,15 @@ export default function UserCard() {
         setToken(userData.token)
         setUsers(userData.users);
         setLoading(false);
-        setUserErr(null);
+        setApiErr(null);
       } catch (err) {
-        console.log("Something went wrong", err);
-        if (axios.isAxiosError(err)) {
-          if (err.response?.status === 401) {
-            setUserErr(
-              "Your login token has expired. Please login to refresh your token to view these orders."
-            );
-            setUser(null);
-            setToken(null);
-            setLoading(false);
-          }
-        } else {
-          // Handle other types of errors (e.g., network errors)
-          setUserErr("An unexpected error occurred. Please try again.");
-          setLoading(false);
-        }
+        handleApiError({
+          err,
+          setApiErr,
+          setLoading,
+          setUser,
+          setToken
+        });
       }
     };
     fetchData();
@@ -64,8 +74,8 @@ export default function UserCard() {
     <>
       {loading ? (
         <IsLoading loading={loading} />
-      ) : userErr ? (
-        <p>{userErr}</p>
+      ) : apiErr ? (
+        <p>{apiErr}</p>
       ) : (
         <>
           <div
@@ -93,10 +103,26 @@ export default function UserCard() {
               <div className="flex items-center justify-end gap-4 col-span-2 px-4">
                 <p className="text-xs text-gray-500">Change user status</p>
                 {user.role === "admin" ? null : (
-                  <StyledButton src="" linkText="Admin" />
+                  <button
+                  onClick={() => {
+                    const body = {email: user.email, role: "staff"}
+                    handleRoleChange(body)
+                  }}
+                  className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                >
+                  Admin
+                </button>
                 )}
                 {user.role === "staff" ? null : (
-                  <StyledButton src="" linkText="Staff" />
+                  <button
+                  onClick={() => {
+                    const body = {email: user.email, role: "admin"}
+                    handleRoleChange(body)
+                  }}
+                  className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                >
+                  Staff
+                </button>
                 )}
                 <div onClick={() => handleRemoveAdmin(user.email)}>
                   <StyledButton src="" linkText="Remove" />

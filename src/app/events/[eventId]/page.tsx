@@ -9,10 +9,10 @@ import Layout from "@/components/Layout";
 import StyledButton from "@/components/StyledButton";
 import TicketDisplay from "@/components/TicketDisplay";
 import { useAuth } from "@/components/UserContext";
+import { handleApiError } from "@/utils/apiErrors";
 import { Event, UnsplashImage } from "@/utils/customTypes";
 import { dateConverter, dateToTimeConverter } from "@/utils/dateConverter";
 import { deleteEvent, getEvent } from "@/utils/eventApiCalls";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -82,20 +82,13 @@ export default function SingleEvent() {
         router.back()
       }
     } catch (err) {
-      console.log("Something went wrong", err);
-      if (axios.isAxiosError(err)) {
-        if (err.response?.status === 401) {
-          setApiErr(
-            "Your login token has expired. Please login to refresh your token to complete this action."
-          );
-          setUser(null);
-          localStorage.removeItem("user")
-          setToken(null);
-          localStorage.removeItem("token")
-        }
-      } else {
-        setApiErr("An unexpected error occurred. Please try again.");
-      }
+      handleApiError({
+        err,
+        setApiErr,
+        setLoading,
+        setUser,
+        setToken
+      });
     }
   };
 
@@ -197,7 +190,7 @@ export default function SingleEvent() {
                 </div>
                 {adminCheck ? (
                   <div>
-                  <div className="flex items-center justify-center gap-4">
+                  <div className="flex items-center flex-wrap justify-center gap-4">
                     <p className="text-xs font-bold text-gray-600">
                       Admin Zone:
                     </p>

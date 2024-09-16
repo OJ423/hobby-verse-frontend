@@ -100,6 +100,7 @@ const EventEditForm: React.FC<EventEditFormProps> = ({
       setValue("location", event.location);
       setValue("capacity", event.capacity);
       setValue("event_category_id", event.event_category_id);
+      setValue("category_name", event.category_name)
       setValue("date", formDateConverter(event.date)); // Set the value for the datetime-local input
       setValue("end_date", formDateConverter(event.end_date))
       setValue("updated_at", new Date().toISOString().slice(0, 16));

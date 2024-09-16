@@ -9,6 +9,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import FormDrawer from "./FormDrawer";
 import ImageSearch from "./ImageSearch";
 import EventAddForm from "./EventAddForm";
+import { handleApiError } from "@/utils/apiErrors";
+import { useAuth } from "./UserContext";
 
 interface EventsListProps {
   status: string;
@@ -21,6 +23,7 @@ const EventsList: React.FC<EventsListProps> = ({ status }) => {
   const [adminCheck, setAdminCheck] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [apiErr, setApiErr] = useState<string | null>(null);
+  const {setUser, setToken} = useAuth()
 
   // Image Select
   const [selectedImage, setSelectedImage] = useState("");
@@ -71,7 +74,13 @@ const EventsList: React.FC<EventsListProps> = ({ status }) => {
         setCategories(categoryData.categories);
         setLoading(false);
       } catch (err) {
-        console.log(err);
+        handleApiError({
+          err,
+          setApiErr,
+          setLoading,
+          setUser,
+          setToken
+        });
       }
     };
     fetchData();
