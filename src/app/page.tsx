@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <section className="mx-auto py-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center max-w-screen-xl">
-          <div className="md:w-full mx-auto">
+        <section className="mx-auto py-8 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center max-w-screen-xl">
+          <div className="md:w-full mx-auto order-last md:order-first">
             <h1 className="font-bold text-3xl lg:text-5xl mb-8">
               Welcome to the Hobby Verse
             </h1>
@@ -33,7 +33,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="flex justify-center md:justify-end md:pl-8 xl:pl-20">
+          <div className="flex justify-center w-4/5 mx-auto md:w-full md:justify-end md:pl-8 xl:pl-20">
             <Image
               src="/welcome-to-the-hobby-verse.png"
               width={500}
