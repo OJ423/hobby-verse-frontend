@@ -1,6 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) TypeScript app.
 
-## Getting Started
+# Welcome to the Hobby Verse
+**Demo**: [https://hobbyverse.vercel.app/](https://hobbyverse.vercel.app/)
+
+Hobby Verse is an event booking and management app for small businesses. Businesses can:
+
+- Set up, edit, and delete events, tickets and categories
+- Perform basic order management
+- Manage user permissions
+
+Users can:
+
+- Browse events and add tickets to their basket
+- Checkout and finalise orders
+- View and print past orders
+- View tickets and add to their Google Calendar
+
+Authentication is based on JWT.
+
+## User Guide
+For the sake of the demo, there are two sets of user credentials you can use:
+### Admin User
+- admin@example.com
+- adminhash123
+
+### Customer User
+- customer1@example.com
+- customerhash123
+
+If you want to register a new user, the API uses [Ethereal Email](https://ethereal.email/login) to spoof the registration process. To validate your email after registering as a user, use the following details to access the email verification process:
+
+- [https://ethereal.email/login](https://ethereal.email/login), and use
+- alexander.reynolds98@ethereal.email
+- y7U31qScWH9CyzhwZv
+
+### Admin Guide
+To set up an event:
+- **Create category**: `/admin/categories`, if the category doesn't already exist.
+- **Create a ticket**: `/admin/tickets`. *Tickets are reusable. Create generic tickets to use across different events*
+- **Add Events**: `/events`. Select `add event` and fill in the form.
+- **Add Event Tickets**: `/events/:eventId`, choose the tickets you want to include and set the quantity. 
+- **Set Event status to published**: `/events/:eventId`
+
+### Customer Guide
+An e-commerce process that is familiar to most users.
+
+## Running locally
+To run the app locally make a directory and initialise it with git - `git init` and clone the repository.
+
+Now, 
+```bash
+npm install
+```
+
+this will install all the dependencies for the app to run
+
+your package.json should look like this
 
 First, run the development server:
 
