@@ -99,4 +99,20 @@ export async function patchAdminUser(token: string | null, body: NewAdminUser) {
   }
 } 
 
+// Get User Tickets
+
+export async function getUserTickets(token: string | null ) {
+  try {
+    const response = await instance.get("users/events/tickets", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data
+  }
+  catch(err) {
+    console.log("error getting admin and staff", err)
+    throw err
+  }
+}
 

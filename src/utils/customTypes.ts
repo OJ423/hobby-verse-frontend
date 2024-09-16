@@ -46,22 +46,22 @@ export interface NewAdminUser {
 }
 
 export interface TicketInput {
-  name:string;
-  description:string;
-  limitations:string;
-  qty_tickets:number;
-  price:number | null;
-  is_free:boolean;
-  updated_at:string;
+  name: string;
+  description: string;
+  limitations: string;
+  qty_tickets: number;
+  price: number | null;
+  is_free: boolean;
+  updated_at: string;
 }
 
 export interface NewTicketInput {
-  name:string;
-  description:string;
-  limitations:string;
-  qty_tickets:number;
-  price:number | null;
-  is_free:boolean;
+  name: string;
+  description: string;
+  limitations: string;
+  qty_tickets: number;
+  price: number | null;
+  is_free: boolean;
 }
 
 export interface EventEditInput {
@@ -137,15 +137,15 @@ export interface EventTickets {
 }
 
 export interface Ticket {
-  id:number;
-  name:string;
-  description:string;
-  limitations:string;
-  qty_tickets:number;
-  price:number;
-  is_free:boolean;
-  created_at:string;
-  updated_at:string;
+  id: number;
+  name: string;
+  description: string;
+  limitations: string;
+  qty_tickets: number;
+  price: number;
+  is_free: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface OrderAPIReturn {
@@ -162,6 +162,17 @@ export interface OrderAPIReturn {
 export interface OrderConfirmation {
   order: OrderAPIReturn;
   orderItems: OrderItem[];
+}
+
+export interface UserTicket {
+  event_name: string,
+  event_description: string,
+  event_location: string,
+  event_date: string,
+  ticket_name: string,
+  ticket_description: string,
+  ticket_quantity: number,
+  ticket_cost: string
 }
 
 // Basket Types
