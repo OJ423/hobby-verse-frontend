@@ -3,6 +3,8 @@ This is a [Next.js](https://nextjs.org) TypeScript app.
 # Welcome to the Hobby Verse
 **Demo**: [https://hobbyverse.vercel.app/](https://hobbyverse.vercel.app/)
 
+<img src="https://github.com/OJ423/hobby-verse-frontend/blob/29e71e60e73e877668671124c2c32a0bcbb52a6c/readme-img/hobby-verse-screenshot.png" alt="Hobby Verse screenshot"/>
+
 Hobby Verse is an event booking and management app for small businesses. Businesses can:
 
 - Set up, edit, and delete events, tickets and categories
