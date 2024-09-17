@@ -15,9 +15,7 @@ export default function Basket() {
     if (!basket || !setBasket) return;
 
     const updatedOrderItems = basket.order_items.filter((_, i) => i !== index);
-    console.log(updatedOrderItems)
     if (updatedOrderItems.length === 0) {
-      console.log("hello")
       setBasket(null)
       localStorage.setItem('basket', "null")
       router.push('/events')
@@ -41,7 +39,6 @@ export default function Basket() {
     setBasket(updatedBasket)
     localStorage.setItem('basket', JSON.stringify(updatedBasket))
   };
-  console.log(basket)
   return (
     <Layout>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start gap-16 px-4 md:px-0 w-full md:w-5/6 xl:w-2/3 py-20">

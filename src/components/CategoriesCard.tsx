@@ -14,19 +14,18 @@ interface CategoryCardProps {
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ category, setApiErr }) => {
   const { setUser, setToken } = useAuth();
-  const [showForm, setShowForm] = useState<boolean>(false)
-
+  const [showForm, setShowForm] = useState<boolean>(false);
 
   const handleDisplayForm = () => {
-    setShowForm(!showForm)
-  }
+    setShowForm(!showForm);
+  };
 
   // Delete Category
   const [deleteCheck, setDeleteCheck] = useState<boolean>(false);
 
   const handleDeleteCheck = () => {
     setDeleteCheck(!deleteCheck);
-    setApiErr(null)
+    setApiErr(null);
   };
 
   const handleDelete = async (catId: number) => {
@@ -47,8 +46,10 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, setApiErr }) => {
           setToken(null);
           localStorage.removeItem("token");
         }
-        if (err.response?.data.msg.startsWith("Key (id)") ) {
-          setApiErr("This category is used in your events. Please change the events with this category to delete it.")
+        if (err.response?.data.msg.startsWith("Key (id)")) {
+          setApiErr(
+            "This category is used in your events. Please change the events with this category to delete it."
+          );
         }
       } else {
         setApiErr("An unexpected error occurred. Please try again.");
@@ -57,20 +58,25 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, setApiErr }) => {
   };
 
   return (
-    <section className="flex items-center justify-between gap-4">
-      <div
-        key={category.id}
-        className="flex flex-col border-2 border-pink-200 p-4 rounded flex-wrap"
-      >
+    <section className="flex flex-col mx-auto md:flex-row md:w-full items-center justify-between gap-4">
+      <div className="flex flex-col border-2 border-pink-200 p-4 rounded flex-wrap">
         <h3 className="font-bold text-lg">{category.name}</h3>
         <p>{category.description}</p>
       </div>
-      <div className="flex gap-4 items-center mt-4">
-        <button onClick={handleDisplayForm} className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs">
+      <div className="flex gap-4 items-center mb-4 md:mb-0">
+        <button
+          onClick={handleDisplayForm}
+          className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"
+        >
           Edit
         </button>
         <FormDrawer showForm={showForm} handleDisplayForm={handleDisplayForm}>
-          <CategoriesEditForm category={category} setApiErr={setApiErr} setShowForm={setShowForm} showForm={showForm} />
+          <CategoriesEditForm
+            category={category}
+            setApiErr={setApiErr}
+            setShowForm={setShowForm}
+            showForm={showForm}
+          />
         </FormDrawer>
         {!deleteCheck ? (
           <button

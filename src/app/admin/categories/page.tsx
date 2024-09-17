@@ -62,7 +62,7 @@ export default function Categories() {
             Here are the event categories. Add new ones, or edit and delete
             existing categories.
           </p>
-          <section className="grid gap-8 grid-cols-1 md:grid-cols-3 mt-8">
+          <section className="grid gap-8 md:gap-16 grid-cols-1 md:grid-cols-3 mt-8">
             <div className="flex flex-wrap gap-4 md:col-span-2">
               {categories?.map((category) => (
                 <CategoryCard key={category.id} category={category} setApiErr={setApiErr}/>
