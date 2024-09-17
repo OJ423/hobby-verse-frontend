@@ -2,6 +2,7 @@
 
 import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
+import StyledButton from "@/components/StyledButton";
 import { useAuth } from "@/components/UserContext";
 import { OrderConfirmation } from "@/utils/customTypes";
 import { dateConverter } from "@/utils/dateConverter";
@@ -155,6 +156,7 @@ export default function UserOrder() {
                     >
                       Print
                     </button>
+                    <StyledButton src="/user/tickets" linkText="Your Tickets" />
                   </div>
                 </section>
               </>

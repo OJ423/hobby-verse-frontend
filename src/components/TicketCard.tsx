@@ -3,7 +3,6 @@
 import { Event, EventTickets } from "@/utils/customTypes";
 import BasketChange from "./BasketChange";
 import { useEffect, useState } from "react";
-import StyledButton from "./StyledButton";
 import { useAuth } from "./UserContext";
 import { deleteEventTicket } from "@/utils/ticketApiCalls";
 import EventTicketsEdit from "./EventTicketsEdit";
@@ -91,7 +90,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, event }) => {
         </div>
       </section>
       {adminCheck ? (
-        <section className="flex gap-4 items-center -m-8 mb-4">
+        <section className="flex gap-4 items-center -mt-8 mb-4 border-b-2 border-pink-200 pb-4">
           <>
             <p className="text-xs font-bold text-gray-600">Admin Zone:</p>
             {showEdit ? (
@@ -120,9 +119,12 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket, event }) => {
                       >
                         Confirm
                       </button>
-                      <div onClick={handleDeleteCheck}>
-                        <StyledButton src="" linkText="Cancel" />
-                      </div>
+                      <button
+                        onClick={handleDeleteCheck}
+                        className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </>
                 )}

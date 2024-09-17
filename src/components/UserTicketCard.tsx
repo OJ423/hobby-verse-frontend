@@ -26,7 +26,10 @@ const UserTicketCard: React.FC<UserTicketCardProps> = ({userTicket}) => {
             <p className="font-medium">{userTicket.ticket_name}</p>
             <p className="text-xs">{userTicket.ticket_description}</p>
           </div>
-          <p className="font-bold">£{userTicket.ticket_cost}</p>
+          {userTicket.ticket_cost ?
+            <p className="font-bold">£{userTicket.ticket_cost}</p>
+            : null
+          }
         </div>
       </div>
     </section>

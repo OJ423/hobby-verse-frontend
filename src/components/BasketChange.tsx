@@ -10,48 +10,9 @@ interface BasketProps {
 const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
   const { basket, setBasket } = useAuth();
   const [ticketQty, setTicketQty] = useState<number>(0);
-  const [customPrice, setCustomPrice] = useState<number>(0); // New state for custom price
+  const [customPrice, setCustomPrice] = useState<number>(0);
 
-  useEffect(() => {
-    if (basket) {
-      basket.order_items.forEach((item) => {
-        if (+item.event_ticket_id === +ticket.id) {
-          setTicketQty(item.ticket_quantity);
-          if(ticket.price === null) {
-            setCustomPrice(item.ticket_price)
-          }
-        }
-      });
-    }
-  }, []);
-
-  const updateBasketWithCustomPrice = (price: number) => {
-    if (!basket) return;
-
-    const updatedOrderItems = basket.order_items.map((item) => {
-      if (+item.event_ticket_id === +ticket.id) {
-        return { ...item, ticket_price: price };
-      }
-      return item;
-    });
-
-    const updatedTotalAmount = updatedOrderItems.reduce(
-      (total, item) => total + item.ticket_price * item.ticket_quantity,
-      0
-    );
-
-    const updatedBasket: Basket = {
-      ...basket,
-      order: {
-        ...basket.order,
-        total_amount: updatedTotalAmount,
-      },
-      order_items: updatedOrderItems,
-    };
-
-    setBasket(updatedBasket);
-    localStorage.setItem("basket", JSON.stringify(updatedBasket));
-  };
+  
 
   const handleCustomPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
@@ -64,13 +25,40 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
   };
 
 
+  const updateBasketWithCustomPrice = (price: number) => {
+    if (!basket) return;
+
+    const updatedOrderItems = basket.order_items.map((item) => {
+      if (+item.event_ticket_id === +ticket.id) {
+        return { ...item, ticket_price: price };
+      }
+      return item;
+    });
+
+    const updatedTotalAmount = updatedOrderItems.reduce(
+      (total, item) => total + (+item.ticket_price * +item.ticket_quantity),
+      0
+    );
+    console.log(updatedOrderItems)
+    const updatedBasket: Basket = {
+      ...basket,
+      order: {
+        ...basket.order,
+        total_amount: updatedTotalAmount,
+      },
+      order_items: updatedOrderItems,
+    };
+    setBasket(updatedBasket);
+    localStorage.setItem("basket", JSON.stringify(updatedBasket));
+  };
+
   const addToOrder = async () => {
     let basketUpdate: Basket | null = null;
 
     if (ticketQty === ticket.quantity) return;
 
-    // Determine the price (if null, use custom price entered by the user)
-    const ticketPrice = ticket.price !== null ? ticket.price : customPrice;
+    // Determine the ticket price or custom price
+    const ticketPrice = +ticket.price !== null ? ticket.price : +customPrice;
 
     if (!basket) {
       // Create a new basket if one doesn't exist
@@ -104,16 +92,14 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
         updatedOrderItems[existingItemIndex] = {
           ...existingItem,
           ticket_quantity: +existingItem.ticket_quantity + 1,
+          ticket_price: ticketPrice,
         };
 
         basketUpdate = {
           ...basket,
           order: {
             ...basket.order,
-          
-
-              total_amount: +basket.order.total_amount + ticketPrice,
-        
+            total_amount: +basket.order.total_amount + ticketPrice,
           },
           order_items: updatedOrderItems,
         };
@@ -169,7 +155,8 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
           ...basket,
           order: {
             ...basket.order,
-            total_amount: +basket.order.total_amount - +existingItem.ticket_price,
+            total_amount:
+              +basket.order.total_amount - +existingItem.ticket_price,
           },
           order_items: updatedOrderItems,
         };
@@ -178,14 +165,18 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
           (item) => +item.event_ticket_id !== +ticket.id
         );
 
-        basketUpdate = updatedOrderItems.length === 0 ? null : {
-          ...basket,
-          order: {
-            ...basket.order,
-            total_amount: +basket.order.total_amount - +existingItem.ticket_price,
-          },
-          order_items: updatedOrderItems,
-        };
+        basketUpdate =
+          updatedOrderItems.length === 0
+            ? null
+            : {
+                ...basket,
+                order: {
+                  ...basket.order,
+                  total_amount:
+                    +basket.order.total_amount - +existingItem.ticket_price,
+                },
+                order_items: updatedOrderItems,
+              };
       }
 
       setTicketQty((prevQty) => (prevQty > 0 ? prevQty - 1 : 0));
@@ -194,6 +185,19 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
     }
   };
 
+  useEffect(() => {
+    if (basket) {
+      basket.order_items.forEach((item) => {
+        if (+item.event_ticket_id === +ticket.id) {
+          setTicketQty(item.ticket_quantity);
+          if (ticket.price === null) {
+            setCustomPrice(item.ticket_price);
+          }
+        }
+      });
+    }
+  }, []);
+
   return (
     <>
       <div className="col-span-1 flex items-center justify-end gap-2">
@@ -201,15 +205,6 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
           <p className="font-bold text-red-500 uppercase">Sold Out</p>
         ) : (
           <>
-            {ticket.price === null ? !ticket.is_free ? (
-              <input
-                type="number"
-                placeholder="Enter amount"
-                value={customPrice !== null ? customPrice : ""}
-                onChange={handleCustomPriceChange}
-                className="border-2 border-pink-200 p-2 rounded w-20 text-center"
-              />
-            ) : null : null}
             <p
               onClick={removeFromOrder}
               aria-label="Remove 1 ticket"
@@ -227,6 +222,17 @@ const BasketChange: React.FC<BasketProps> = ({ ticket, event }) => {
             >
               +
             </p>
+            {ticketQty ? ticket.price === null ? (
+              !ticket.is_free ? (
+                <input
+                  type="number"
+                  placeholder="Enter amount"
+                  value={customPrice !== null ? customPrice : ""}
+                  onChange={handleCustomPriceChange}
+                  className="border-2 border-pink-200 p-2 rounded w-20 text-center"
+                />
+              ) : null
+            ) : null :null}
           </>
         )}
       </div>

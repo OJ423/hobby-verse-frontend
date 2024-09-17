@@ -21,7 +21,6 @@ export default function AdminOrder() {
   const handlePrint = () => {
     window.print()
   }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,7 +46,6 @@ export default function AdminOrder() {
             setLoading(false);
           }
         } else {
-          // Handle other types of errors (e.g., network errors)
           setOrderFetchErr("An unexpected error occurred. Please try again.");
           setLoading(false);
         }
@@ -123,7 +121,15 @@ export default function AdminOrder() {
                     </div>
                   ))}
                 </div>
-                <section className="md:mt-16">
+                <section className="flex flex-col gap-4">
+                  <div className="p-4 bg-pink-100 rounded">
+                    <p className="uppercase text-xs text-gray-500 font-bold">Customer Details</p>
+                    <p>{orderData.order.customer_name}</p>
+                    <p>{orderData.order.customer_email}</p>
+                    <p className="uppercase text-xs text-gray-500 mt-4 font-bold">Order Date</p>
+                    <p>{dateConverter(orderData.order.created_at)}</p>
+
+                  </div>
                   <div className="lg:col-span-1 flex flex-col gap-4 p-4 border-4 border-pink-100 rounded">
                     <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
                     {orderData.orderItems.map((item) => (

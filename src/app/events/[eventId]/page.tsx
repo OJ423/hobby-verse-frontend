@@ -6,7 +6,6 @@ import FormDrawer from "@/components/FormDrawer";
 import ImageSearch from "@/components/ImageSearch";
 import IsLoading from "@/components/IsLoading";
 import Layout from "@/components/Layout";
-import StyledButton from "@/components/StyledButton";
 import TicketDisplay from "@/components/TicketDisplay";
 import { useAuth } from "@/components/UserContext";
 import { handleApiError } from "@/utils/apiErrors";
@@ -14,11 +13,9 @@ import { Event, UnsplashImage } from "@/utils/customTypes";
 import { dateConverter, dateToTimeConverter } from "@/utils/dateConverter";
 import { deleteEvent, getEvent } from "@/utils/eventApiCalls";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineEmojiPeople, MdOutlineMap } from "react-icons/md";
-
 
 export default function SingleEvent() {
   const { token, setToken, setUser } = useAuth();
@@ -28,42 +25,46 @@ export default function SingleEvent() {
   const [deleteCheck, setDeleteCheck] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [apiErr, setApiErr] = useState<string | null>(null);
-  const [formType, setFormType] = useState<string>("")
+  const [formType, setFormType] = useState<string>("");
 
   // Image Select
   const [selectedImage, setSelectedImage] = useState("");
   const [images, setImages] = useState<UnsplashImage[] | []>([]);
-  const [imageConfirm, setImageConfirm] = useState<string>("")
-  
-  const router = useRouter()
+  const [imageConfirm, setImageConfirm] = useState<string>("");
+
+  const router = useRouter();
+
+  const navBack = () => {
+    router.back();
+  };
 
   const handleImageSelect = (imageUrl: string) => {
     setSelectedImage(imageUrl);
-    setImages([])
-    setImageConfirm("Event image selected")
+    setImages([]);
+    setImageConfirm("Event image selected");
   };
 
   // Generic Show Form
   const handleDisplayForm = () => {
     setShowForm(!showForm);
-    setImageConfirm("")
+    setImageConfirm("");
   };
 
   // Show Edit Form
 
   const handleDisplayEditForm = () => {
-    setApiErr(null)
-    setFormType("edit")
+    setApiErr(null);
+    setFormType("edit");
     setShowForm(!showForm);
-    setImageConfirm("")
+    setImageConfirm("");
   };
 
   // Show Add Ticket Form
   const handleDisplayTicketForm = () => {
-    setApiErr(null)
-    setFormType("ticket")
+    setApiErr(null);
+    setFormType("ticket");
     setShowForm(!showForm);
-    setImageConfirm("")
+    setImageConfirm("");
   };
 
   const { eventId } = useParams<{ eventId: string }>();
@@ -77,9 +78,9 @@ export default function SingleEvent() {
       if (event) {
         const localToken = localStorage.getItem("token");
         const data = await deleteEvent(localToken, event.id);
-        setToken(data.token)
-        localStorage.setItem("token", data.token)
-        router.back()
+        setToken(data.token);
+        localStorage.setItem("token", data.token);
+        router.back();
       }
     } catch (err) {
       handleApiError({
@@ -87,7 +88,7 @@ export default function SingleEvent() {
         setApiErr,
         setLoading,
         setUser,
-        setToken
+        setToken,
       });
     }
   };
@@ -115,7 +116,7 @@ export default function SingleEvent() {
 
     fetchData();
   }, [eventId, token]);
-  
+
   return (
     <>
       <Layout>
@@ -126,12 +127,12 @@ export default function SingleEvent() {
         ) : event ? (
           <>
             <section className="my-4 w-full pt-4 px-4 max-w-screen-lg">
-              <Link
-                href="/events"
+              <div
+                onClick={navBack}
                 className="text-xs text-pink-500 font-bold transition-all duration-500 hover:text-gray-900"
               >
                 {`< Back to events`}
-              </Link>
+              </div>
             </section>
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center  mt-4 w-full px-4 max-w-screen-lg mb-8">
               <div className="w-full h-full">
@@ -163,7 +164,8 @@ export default function SingleEvent() {
                 <div className="flex flex-col gap-4 mb-4 border-4 border-pink-500 rounded p-4 md:p-8">
                   <div className="flex justify-between items-center gap-4 border-b-2 border-pink-200 pb-4 md:pb-8">
                     <p className="py-2 px-4 bg-pink-500 text-white font-bold text-sm rounded">
-                      {dateConverter(event.date)} - {dateToTimeConverter(event.end_date)}
+                      {dateConverter(event.date)} -{" "}
+                      {dateToTimeConverter(event.end_date)}
                     </p>
                     <p className="text-xs font-semibold p-2 bg-gray-200 rounded border-2 border-gray-400">
                       {event.category_name}
@@ -189,70 +191,81 @@ export default function SingleEvent() {
                   </div>
                 </div>
                 {adminCheck ? (
-                  <div>
-                  <div className="flex items-center flex-wrap justify-center gap-4">
-                    <p className="text-xs font-bold text-gray-600">
-                      Admin Zone:
-                    </p>
-                    <div onClick={handleDisplayTicketForm}>
-                      <StyledButton src="" linkText="Add Tickets" />
-                    </div>
-                    <div onClick={handleDisplayEditForm}>
-                      <StyledButton src="" linkText="Edit" />
-                    </div>
-                    <FormDrawer
-                      showForm={showForm}
-                      handleDisplayForm={handleDisplayForm}
-                    >
-                      {formType === "edit" ?
-                      <>
-                      <ImageSearch
-                        onSelectImage={handleImageSelect}
-                        images={images}
-                        setImages={setImages}
-                        imageConfirm={imageConfirm}
-                      />
-                      <EventEditForm
-                        showForm={showForm}
-                        setShowForm={setShowForm}
-                        event={event}
-                        setApiErr={setApiErr}
-                        selectedImage={selectedImage}
-                      />
-                      </>
-                      : 
-                      <EventTicketsAdd
-                        showForm={showForm}
-                        setShowForm={setShowForm}
-                        event={event}
-                        setApiErr={setApiErr}
-                        apiErr={apiErr}
-                      />
-                      }
-                    </FormDrawer>
-                    {!deleteCheck ? (
-                      <button
-                        onClick={handleDeleteCheck}
-                        className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
-                      >
-                        Delete
-                      </button>
-                    ) : (
-                      <>
-                        <div className="flex items-center gap-4">
+                  <div className="flex flex-col">
+                    <div className="flex items-center flex-wrap justify-center gap-4 flex-wrap">
+                      <p className="text-xs font-bold text-gray-600">
+                        Admin Zone:
+                      </p>
+                      <div className="flex flex-row gap-4 flex-wrap items-center justify-center">
+                        <button
+                          onClick={handleDisplayTicketForm}
+                          className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"  
+                        >
+                          Add Ticket
+                        </button>
+                        <button
+                          onClick={handleDisplayEditForm}
+                          className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                        >
+                          Edit
+                        </button>
+                        <FormDrawer
+                          showForm={showForm}
+                          handleDisplayForm={handleDisplayForm}
+                        >
+                          {formType === "edit" ? (
+                            <>
+                              <ImageSearch
+                                onSelectImage={handleImageSelect}
+                                images={images}
+                                setImages={setImages}
+                                imageConfirm={imageConfirm}
+                              />
+                              <EventEditForm
+                                showForm={showForm}
+                                setShowForm={setShowForm}
+                                event={event}
+                                setApiErr={setApiErr}
+                                selectedImage={selectedImage}
+                              />
+                            </>
+                          ) : (
+                            <EventTicketsAdd
+                              showForm={showForm}
+                              setShowForm={setShowForm}
+                              event={event}
+                              setApiErr={setApiErr}
+                              apiErr={apiErr}
+                            />
+                          )}
+                        </FormDrawer>
+                        {!deleteCheck ? (
                           <button
-                            onClick={handleDelete}
+                            onClick={handleDeleteCheck}
                             className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
                           >
-                            Confirm
+                            Delete
                           </button>
-                          <div onClick={handleDeleteCheck}>
-                            <StyledButton src="" linkText="Cancel" />
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center gap-4">
+                              <button
+                                onClick={handleDelete}
+                                className="border-solid border-4 border-red-500 text-red-500 py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-red-500 hover:border-red-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                onClick={handleDeleteCheck}
+                                className="border-solid border-4 border-black py-3 px-6 inline-block rounded-xl proper font-semibold hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-500 ease-out text-xs"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
                     {apiErr ? (
                       <p className="text-red-500 font-bold mt-4">{apiErr}</p>
                     ) : null}
