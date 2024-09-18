@@ -103,7 +103,7 @@ export default function Footer() {
         </div>
       </section>
       <section className="mt-20 py-8 bg-gray-300 flex items-center justify-center w-[100%] box-sizing">
-        <p className="font-bold text-sm">© 2024 Copyright: Commyounity</p>
+        <p className="font-bold text-sm">© 2024 Copyright: Hobby Verse</p>
       </section>
     </footer>
   );
