@@ -11,7 +11,7 @@ import { getAllAdminStaff } from "@/utils/userApiCalls";
 import { useEffect, useState } from "react";
 
 export default function AdminUsers() {
-  const { token, setUser, setToken } = useAuth();
+  const { user, token, setUser, setToken } = useAuth();
   const [users, setUsers] = useState<User[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [apiErr, setApiErr] = useState<string | null>(null);
@@ -62,13 +62,15 @@ export default function AdminUsers() {
               <p>Current staff and admin:</p>
               <section className="flex flex-wrap gap-16 justify-center items-center">
                 <div className="flex flex-col">
-                  {users.map((user) => (
+                  {users.map((admin) => (
+                    user ? user.id !== admin.id ?  
                     <UserCard
-                      user={user}
-                      key={user.id}
+                      user={admin}
+                      key={admin.id}
                       setApiErr={setApiErr}
                       setLoading={setLoading}
                     />
+                    : null : null
                   ))}
                 </div>
                 <section className="flex flex-col gap-4 p-4 bg-pink-100 rounded">
