@@ -72,7 +72,7 @@ export default function NavBar() {
                 className={`${
                   navOpen
                     ? "opacity-0 transition-all duration-500"
-                    : "opactiy-100 transition-all duration-500"
+                    : "opacity-100 transition-all duration-500"
                 }`}
                 strokeLinejoin="round"
                 d="M3.75 17.25h16.5"
