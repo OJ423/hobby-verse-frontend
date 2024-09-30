@@ -92,7 +92,7 @@ export default function Footer() {
           <Link href="/">
             <Image
               src="/hobby-verse.svg"
-              alt="Commyounity Logo"
+              alt="Hobby Verse Logo"
               className="w-40 md:w-60"
               width={250}
               height={12}
